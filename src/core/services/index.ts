@@ -6,9 +6,7 @@ export { aiService } from './ai.service';
 export { videoService } from './video.service';
 export { storageService } from './storage.service';
 export { visionService } from './vision.service';
-export { workflowService } from './workflow.service';
-export { scriptTemplateService } from '../templates/script.templates';
-export { editorService, EditorService } from './editor.service';
+export { dramaWorkflowService, DramaWorkflowService } from './drama.workflow.service';
 export { costService, CostService } from './cost.service';
 export { consistencyService, ConsistencyService } from './consistency.service';
 export { novelService, NovelService } from './novel.service';
@@ -16,18 +14,12 @@ export { novelService, NovelService } from './novel.service';
 // 重新导出类型
 export type { AIResponse, RequestConfig } from './ai.service';
 export type {
-  WorkflowState,
-  WorkflowData,
-  WorkflowConfig,
-  WorkflowCallbacks,
-  TimelineData,
-  WorkflowStep
-} from './workflow.service';
-export type {
-  EditorConfig,
-  EditorAction,
-  EditorHistory
-} from './editor.service';
+  DramaWorkflowStep,
+  DramaWorkflowState,
+  DramaWorkflowData,
+  DramaWorkflowConfig,
+  DramaWorkflowCallbacks
+} from './drama.workflow.service';
 export type {
   CostRecord,
   CostStats,
