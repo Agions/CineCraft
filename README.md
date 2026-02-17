@@ -90,13 +90,13 @@ CineCraft (电影工坊) 是一款专业的 **AI 漫剧视频生成平台**，�
 - **音效库**: 丰富的漫剧音效
 - **音频混音**: 专业级音频处理
 
-### 5. 脚本编辑
-- **富文本编辑**: 支持格式化文本
-- **段落管理**: 添加/删除/调整段落
-- **时间轴同步**: 脚本与视频时间轴关联
+### 5. 分镜编辑
+- **分镜管理**: 添加/删除/调整分镜
+- **镜头设计**: 推拉摇移等镜头运动
+- **时间轴同步**: 分镜与视频时间轴关联
 - **版本历史**: 自动保存编辑历史
 
-### 5. 视频混剪
+### 6. 视频剪辑
 - **可视化编辑器**: 拖拽式剪辑界面
 - **转场效果**: 淡入淡出/交叉溶解/擦除/滑动/缩放
 - **字幕添加**: 自动生成和编辑字幕
@@ -166,9 +166,9 @@ src/
 │   │   ├── project.store.ts # 项目状态
 │   │   └── user.store.ts    # 用户状态
 │   ├── templates/           # 模板库
-│   │   ├── script.templates.ts   # 脚本模板（7种）
-│   │   ├── dedup.templates.ts    # 去重模板
-│   │   └── dedup.variants.ts     # 去重变体（8种）
+│   │   ├── storyboard.templates.ts  # 分镜模板
+│   │   ├── dedup.templates.ts       # 去重模板
+│   │   └── dedup.variants.ts        # 去重变体（8种）
 │   ├── types/               # 类型定义
 │   │   └── index.ts         # 所有类型
 │   └── utils/               # 工具函数
@@ -180,8 +180,8 @@ src/
 │   │   └── Card/            # 卡片组件
 │   ├── ModelSelector/       # 模型选择器
 │   ├── VideoUploader/       # 视频上传
-│   ├── ScriptGenerator/     # 脚本生成器
-│   └── ScriptGeneratorV2/   # 优化版本
+│   ├── StoryboardGenerator/ # 分镜生成器
+│   └── CharacterDesigner/   # 角色设计器
 ├── pages/                   # 页面层
 │   ├── Home/                # 首页
 │   ├── Dashboard/           # 仪表盘

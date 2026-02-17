@@ -1,6 +1,6 @@
 /**
  * 一致性服务
- * 确保角色形象和解说风格在全剧中保持一致
+ * 确保角色形象在全剧中保持一致
  */
 
 import { storageService } from './storage.service';
@@ -31,22 +31,20 @@ export interface Character {
   updatedAt: string;
 }
 
-// 解说风格
-export interface NarrationStyle {
+// 漫剧风格
+export interface DramaStyle {
   id: string;
   name: string;
-  tone: 'professional' | 'casual' | 'dramatic' | 'humorous' | 'mysterious';
-  speed: 'slow' | 'normal' | 'fast';
-  emotion: 'neutral' | 'warm' | 'excited' | 'calm' | 'tense';
-  vocabulary: 'simple' | 'standard' | 'rich';
-  sentenceStructure: 'short' | 'mixed' | 'complex';
+  genre: 'romance' | 'action' | 'comedy' | 'drama' | 'mystery' | 'fantasy';
+  tone: 'light' | 'dark' | 'neutral';
+  pacing: 'slow' | 'normal' | 'fast';
+  artStyle: 'anime' | 'manga' | 'realistic' | 'chibi';
   characteristics: string[];
-  examples: string[];
 }
 
 // 一致性规则
 export interface ConsistencyRule {
-  type: 'character' | 'narration' | 'scene' | 'timeline';
+  type: 'character' | 'scene' | 'timeline' | 'style';
   priority: 'high' | 'medium' | 'low';
   validator: (content: any, context: any) => boolean;
   fixer?: (content: any, context: any) => any;
@@ -57,7 +55,7 @@ export interface ConsistencyCheckpoint {
   id: string;
   episodeId: string;
   sceneId: string;
-  type: 'character' | 'appearance' | 'voice' | 'narration' | 'scene';
+  type: 'character' | 'appearance' | 'scene' | 'style';
   status: 'passed' | 'warning' | 'failed';
   issues: ConsistencyIssue[];
   checkedAt: string;
@@ -86,7 +84,7 @@ export interface CharacterLibrary {
 
 class ConsistencyService {
   private characterCache: Map<string, Character> = new Map();
-  private styleCache: Map<string, NarrationStyle> = new Map();
+  private styleCache: Map<string, DramaStyle> = new Map();
 
   /**
    * 创建角色
@@ -155,10 +153,10 @@ class ConsistencyService {
   }
 
   /**
-   * 创建解说风格
+   * 创建漫剧风格
    */
-  createNarrationStyle(styleData: Omit<NarrationStyle, 'id'>): NarrationStyle {
-    const style: NarrationStyle = {
+  createDramaStyle(styleData: Omit<DramaStyle, 'id'>): DramaStyle {
+    const style: DramaStyle = {
       ...styleData,
       id: `style_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`
     };
@@ -168,52 +166,54 @@ class ConsistencyService {
   }
 
   /**
-   * 获取解说风格
+   * 获取漫剧风格
    */
-  getNarrationStyle(id: string): NarrationStyle | undefined {
+  getDramaStyle(id: string): DramaStyle | undefined {
     return this.styleCache.get(id);
   }
 
   /**
-   * 生成解说提示词
+   * 生成漫剧风格提示词
    */
-  generateNarrationPrompt(style: NarrationStyle): string {
-    const toneMap: Record<string, string> = {
-      professional: '专业严谨',
-      casual: '轻松随意',
-      dramatic: '戏剧张力',
-      humorous: '幽默风趣',
-      mysterious: '神秘悬疑'
+  generateDramaStylePrompt(style: DramaStyle): string {
+    const genreMap: Record<string, string> = {
+      romance: '浪漫爱情',
+      action: '动作冒险',
+      comedy: '喜剧搞笑',
+      drama: '剧情正剧',
+      mystery: '悬疑推理',
+      fantasy: '奇幻玄幻'
     };
 
-    const speedMap: Record<string, string> = {
-      slow: '缓慢沉稳',
+    const toneMap: Record<string, string> = {
+      light: '轻松明快',
+      dark: '沉重黑暗',
+      neutral: '中性平衡'
+    };
+
+    const pacingMap: Record<string, string> = {
+      slow: '缓慢细腻',
       normal: '适中流畅',
       fast: '快速紧凑'
     };
 
-    const emotionMap: Record<string, string> = {
-      neutral: '中性客观',
-      warm: '温暖亲切',
-      excited: '兴奋激动',
-      calm: '平静舒缓',
-      tense: '紧张刺激'
+    const artStyleMap: Record<string, string> = {
+      anime: '日式动漫',
+      manga: '漫画风格',
+      realistic: '写实风格',
+      chibi: 'Q版可爱'
     };
 
     return `
-解说风格: ${style.name}
-语气: ${toneMap[style.tone]}
-语速: ${speedMap[style.speed]}
-情感: ${emotionMap[style.emotion]}
-词汇: ${style.vocabulary === 'simple' ? '简洁明了' : style.vocabulary === 'standard' ? '标准规范' : '丰富华丽'}
-句式: ${style.sentenceStructure === 'short' ? '简短有力' : style.sentenceStructure === 'mixed' ? '长短结合' : '复杂优美'}
+漫剧风格: ${style.name}
+类型: ${genreMap[style.genre]}
+基调: ${toneMap[style.tone]}
+节奏: ${pacingMap[style.pacing]}
+画风: ${artStyleMap[style.artStyle]}
 
 特点: ${style.characteristics.join('，')}
 
-示例:
-${style.examples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}
-
-重要: 必须保持以上风格一致，全剧统一使用此解说风格。
+重要: 必须保持以上风格一致，全剧统一使用此漫剧风格。
     `.trim();
   }
 
@@ -260,50 +260,43 @@ ${style.examples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}
   }
 
   /**
-   * 检查解说一致性
+   * 检查漫剧风格一致性
    */
-  checkNarrationConsistency(
+  checkDramaStyleConsistency(
     styleId: string,
-    narrationText: string
+    sceneDescription: string
   ): ConsistencyIssue[] {
-    const style = this.getNarrationStyle(styleId);
+    const style = this.getDramaStyle(styleId);
     if (!style) {
       return [{
         type: 'style_not_found',
         severity: 'error',
-        message: '解说风格未定义',
-        suggestion: '请先创建解说风格',
+        message: '漫剧风格未定义',
+        suggestion: '请先创建漫剧风格',
         autoFixable: false
       }];
     }
 
     const issues: ConsistencyIssue[] = [];
 
-    // 检查词汇复杂度
-    const wordCount = narrationText.split(/\s+/).length;
-    const avgWordLength = narrationText.length / wordCount;
+    // 检查画风关键词
+    const artStyleKeywords: Record<string, string[]> = {
+      anime: ['动漫', 'anime', '日式'],
+      manga: ['漫画', 'manga', '黑白'],
+      realistic: ['写实', 'realistic', '真实'],
+      chibi: ['Q版', 'chibi', '可爱', '大头']
+    };
 
-    if (style.vocabulary === 'simple' && avgWordLength > 5) {
+    const keywords = artStyleKeywords[style.artStyle];
+    const hasMatchingStyle = keywords.some(kw => sceneDescription.includes(kw));
+
+    if (!hasMatchingStyle) {
       issues.push({
-        type: 'vocabulary_too_complex',
+        type: 'art_style_mismatch',
         severity: 'warning',
-        message: '词汇过于复杂，不符合简洁风格',
-        suggestion: '使用更简单的词汇',
+        message: `场景描述可能不符合${style.artStyle}画风`,
+        suggestion: `确保场景使用${style.artStyle}风格描述`,
         autoFixable: false
-      });
-    }
-
-    // 检查句子长度
-    const sentences = narrationText.split(/[。！？.!?]/).filter(s => s.trim());
-    const avgSentenceLength = wordCount / sentences.length;
-
-    if (style.sentenceStructure === 'short' && avgSentenceLength > 15) {
-      issues.push({
-        type: 'sentence_too_long',
-        severity: 'warning',
-        message: '句子过长，不符合简短风格',
-        suggestion: '拆分为更短的句子',
-        autoFixable: true
       });
     }
 
@@ -316,7 +309,7 @@ ${style.examples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}
   autoFix(
     content: string,
     issues: ConsistencyIssue[],
-    context: { character?: Character; style?: NarrationStyle }
+    context: { character?: Character; style?: DramaStyle }
   ): string {
     let fixed = content;
 
@@ -329,11 +322,6 @@ ${style.examples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}
             // 添加缺失的特征描述
             fixed = `${fixed} ${context.character.appearance.features.join('，')}`;
           }
-          break;
-
-        case 'sentence_too_long':
-          // 尝试拆分长句
-          fixed = this.splitLongSentences(fixed);
           break;
       }
     }
@@ -470,7 +458,7 @@ export default ConsistencyService;
 // 导出类型
 export type {
   Character,
-  NarrationStyle,
+  DramaStyle,
   ConsistencyRule,
   ConsistencyCheckpoint,
   ConsistencyIssue,

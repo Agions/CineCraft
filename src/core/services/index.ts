@@ -34,7 +34,7 @@ export type {
 } from './cost.service';
 export type {
   Character,
-  NarrationStyle,
+  DramaStyle,
   ConsistencyRule,
   ConsistencyCheckpoint,
   ConsistencyIssue,

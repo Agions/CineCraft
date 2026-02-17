@@ -1,13 +1,13 @@
 /**
  * 一致性管理 Hook
- * 管理角色一致性和解说风格统一
+ * 管理角色一致性和漫剧风格统一
  */
 
 import { useState, useCallback, useMemo } from 'react';
 import {
   consistencyService,
   type Character,
-  type NarrationStyle,
+  type DramaStyle,
   type ConsistencyIssue,
   type ConsistencyCheckpoint
 } from '@/core/services/consistency.service';
@@ -21,19 +21,19 @@ export interface UseConsistencyReturn {
   deleteCharacter: (id: string) => void;
   getCharacter: (id: string) => Character | undefined;
 
-  // 解说风格
-  styles: NarrationStyle[];
-  createStyle: (data: Omit<NarrationStyle, 'id'>) => NarrationStyle;
-  getStyle: (id: string) => NarrationStyle | undefined;
+  // 漫剧风格
+  styles: DramaStyle[];
+  createStyle: (data: Omit<DramaStyle, 'id'>) => DramaStyle;
+  getStyle: (id: string) => DramaStyle | undefined;
 
   // 一致性检查
   checkCharacter: (characterId: string, description: string) => ConsistencyIssue[];
-  checkNarration: (styleId: string, text: string) => ConsistencyIssue[];
+  checkDramaStyle: (styleId: string, sceneDescription: string) => ConsistencyIssue[];
   autoFix: (content: string, issues: ConsistencyIssue[], context: any) => string;
 
   // 生成提示词
   getCharacterPrompt: (characterId: string) => string;
-  getNarrationPrompt: (styleId: string) => string;
+  getDramaStylePrompt: (styleId: string) => string;
 
   // 导出
   exportHandbook: () => string;
@@ -53,10 +53,8 @@ export function useConsistency(projectId: string): UseConsistencyReturn {
   });
 
   // 风格状态
-  const [styles, setStyles] = useState<NarrationStyle[]>(() => {
-    return Array.from(consistencyService.getAllCharacters()).map(() =>
-      consistencyService.getNarrationStyle('default')
-    ).filter(Boolean) as NarrationStyle[];
+  const [styles, setStyles] = useState<DramaStyle[]>(() => {
+    return [];
   });
 
   // 创建角色
@@ -94,16 +92,16 @@ export function useConsistency(projectId: string): UseConsistencyReturn {
 
   // 创建风格
   const createStyle = useCallback((
-    data: Omit<NarrationStyle, 'id'>
-  ): NarrationStyle => {
-    const style = consistencyService.createNarrationStyle(data);
+    data: Omit<DramaStyle, 'id'>
+  ): DramaStyle => {
+    const style = consistencyService.createDramaStyle(data);
     setStyles(prev => [...prev, style]);
     return style;
   }, []);
 
   // 获取风格
-  const getStyle = useCallback((id: string): NarrationStyle | undefined => {
-    return consistencyService.getNarrationStyle(id);
+  const getStyle = useCallback((id: string): DramaStyle | undefined => {
+    return consistencyService.getDramaStyle(id);
   }, []);
 
   // 检查角色一致性
@@ -114,12 +112,12 @@ export function useConsistency(projectId: string): UseConsistencyReturn {
     return consistencyService.checkCharacterConsistency(characterId, description);
   }, []);
 
-  // 检查解说一致性
-  const checkNarration = useCallback((
+  // 检查漫剧风格一致性
+  const checkDramaStyle = useCallback((
     styleId: string,
-    text: string
+    sceneDescription: string
   ): ConsistencyIssue[] => {
-    return consistencyService.checkNarrationConsistency(styleId, text);
+    return consistencyService.checkDramaStyleConsistency(styleId, sceneDescription);
   }, []);
 
   // 自动修复
@@ -138,11 +136,11 @@ export function useConsistency(projectId: string): UseConsistencyReturn {
     return consistencyService.generateCharacterPrompt(character);
   }, []);
 
-  // 获取解说提示词
-  const getNarrationPrompt = useCallback((styleId: string): string => {
-    const style = consistencyService.getNarrationStyle(styleId);
+  // 获取漫剧风格提示词
+  const getDramaStylePrompt = useCallback((styleId: string): string => {
+    const style = consistencyService.getDramaStyle(styleId);
     if (!style) return '';
-    return consistencyService.generateNarrationPrompt(style);
+    return consistencyService.generateDramaStylePrompt(style);
   }, []);
 
   // 导出手册
@@ -167,10 +165,10 @@ export function useConsistency(projectId: string): UseConsistencyReturn {
     createStyle,
     getStyle,
     checkCharacter,
-    checkNarration,
+    checkDramaStyle,
     autoFix,
     getCharacterPrompt,
-    getNarrationPrompt,
+    getDramaStylePrompt,
     exportHandbook,
     stats
   };
