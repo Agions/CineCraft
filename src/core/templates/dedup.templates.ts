@@ -4,6 +4,7 @@
  */
 
 import type { ScriptSegment, ScriptData } from '@/core/types';
+import { dedupVariantService, type DedupVariant } from './dedup.variants';
 
 // 去重策略类型
 export type DedupStrategy = 'exact' | 'semantic' | 'structural' | 'template';
@@ -33,6 +34,9 @@ export interface DedupConfig {
   threshold: number;
   autoFix: boolean;
   preserveMeaning: boolean;
+  // 自动变体选择
+  autoVariant: boolean;
+  variantIntensity?: number;
 }
 
 // 常用短语库（用于检测模板化内容）
@@ -149,6 +153,7 @@ class DedupService {
       threshold: 0.7,
       autoFix: false,
       preserveMeaning: true,
+      autoVariant: true, // 默认启用自动变体
       ...config
     };
   }
@@ -524,15 +529,25 @@ class DedupService {
   }
 
   /**
-   * 改写段落
+   * 改写段落（使用自动变体）
    */
   private rewriteSegment(segment: ScriptSegment, similarity: number): ScriptSegment {
     let content = segment.content;
 
-    // 根据相似度决定改写程度
-    if (similarity >= 0.9) {
-      // 完全重写
-      content = this.completeRewrite(content);
+    // 如果启用自动变体，使用变体服务
+    if (this.config.autoVariant) {
+      const result = dedupVariantService.smartDedup(content, similarity);
+      content = result.content;
+    } else {
+      // 根据相似度决定改写程度
+      if (similarity >= 0.9) {
+        content = this.completeRewrite(content);
+      } else if (similarity >= 0.8) {
+        content = this.majorRewrite(content);
+      } else {
+        content = this.minorRewrite(content);
+      }
+    }
     } else if (similarity >= 0.8) {
       // 大幅改写
       content = this.majorRewrite(content);

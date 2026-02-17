@@ -111,6 +111,8 @@ export interface WorkflowConfig {
     enabled: boolean;
     autoFix: boolean;
     threshold: number;
+    autoVariant?: boolean;
+    variantIntensity?: number;
   };
   uniquenessConfig?: {
     enabled: boolean;
@@ -512,13 +514,14 @@ ${section.tips?.map((tip: string) => `- ${tip}`).join('\n')}
       throw new Error('脚本尚未生成');
     }
 
-    // 配置去重服务
+    // 配置去重服务（启用自动变体）
     const config = {
       enabled: true,
       strategies: ['exact', 'semantic', 'template'] as const,
       threshold: 0.7,
-      autoFix: false,
+      autoFix: true, // 自动修复
       preserveMeaning: true,
+      autoVariant: true, // 启用自动变体选择
       ...dedupConfig
     };
 
