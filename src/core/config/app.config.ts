@@ -5,10 +5,10 @@
 
 // 应用信息
 export const APP_CONFIG = {
-  name: 'CineForge',
+  name: 'ReelForge',
   version: '1.0.0',
   description: 'AI驱动的专业视频内容创作平台',
-  repository: 'https://github.com/Agions/cineforge',
+  repository: 'https://github.com/Agions/reelforge',
   license: 'CC-BY-NC-4.0'
 } as const;
 
