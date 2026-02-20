@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Card, Radio, Button, Input, Space, message, Tooltip } from 'antd';
 import { ExportOutlined, FileTextOutlined, FileMarkdownOutlined, FilePdfOutlined, FileExcelOutlined, GlobalOutlined } from '@ant-design/icons';
-import { ExportFormat, exportScript } from '@/services/exportService';
-import { Script } from '@/services/aiService';
+import { ExportFormat, exportScript } from '@/core/services/legacy/exportService';
+import { Script } from '@/core/services/legacy/aiService';
 import styles from './ExportPanel.module.less';
 
 interface ExportPanelProps {

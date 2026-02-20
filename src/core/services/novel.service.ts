@@ -474,12 +474,3 @@ ${shotTypeMap[panel.shotType]}，${angleMap[panel.angle]}，
 // 导出单例
 export const novelService = new NovelService();
 export default NovelService;
-
-// 导出类型
-export type {
-  NovelChapter,
-  ScriptScene,
-  Script,
-  NovelParseResult,
-  Storyboard
-};

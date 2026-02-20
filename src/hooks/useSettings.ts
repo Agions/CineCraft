@@ -6,9 +6,8 @@
  * @date 2024
  * @version 1.0
  */
-import { useState, useEffect, useCallback } from 'react';
-import { useStore } from '../store';
-import { AIModelType } from '../types';
+import { useState, useCallback } from 'react';
+import { useLegacyStore } from '@/core/stores';
 
 // 启用调试模式
 const DEBUG = false;
@@ -301,7 +300,7 @@ export const useAutoSave = () => {
 
 // 主题设置
 export const useTheme = () => {
-  const { isDarkMode, setIsDarkMode } = useStore();
+  const { isDarkMode, setIsDarkMode } = useLegacyStore();
   const { settings, updateSettings } = useSettingsStore();
 
   // 切换主题

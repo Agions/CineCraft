@@ -1,6 +1,6 @@
 /**
  * 一致性服务
- * 确保角色形象在全剧中保持一致
+ * 确保角色形象在全漫剧中保持一致
  */
 
 import { storageService } from './storage.service';

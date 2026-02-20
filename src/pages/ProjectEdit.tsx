@@ -14,11 +14,11 @@ import {
   Result
 } from 'antd';
 import { ArrowLeftOutlined, SaveOutlined, VideoCameraOutlined, EditOutlined, CheckCircleOutlined } from '@ant-design/icons';
-import VideoSelector from '@/components/VideoSelector';
-import ScriptEditor from '@/components/ScriptEditor';
-import { VideoMetadata, VideoSegment, analyzeVideo, extractKeyFrames } from '@/services/videoService';
-import { generateScriptWithAI, analyzeKeyFramesWithAI } from '@/services/aiService';
-import { loadProjectFromFile, saveProjectToFile } from '@/services/tauriService';
+import VideoSelector from '@/components/business/VideoSelector';
+import ScriptEditor from '@/components/business/ScriptEditor';
+import { VideoMetadata, VideoSegment, analyzeVideo, extractKeyFrames } from '@/core/services/legacy/videoService';
+import { generateScriptWithAI, analyzeKeyFramesWithAI } from '@/core/services/legacy/aiService';
+import { loadProjectFromFile, saveProjectToFile } from '@/core/services/legacy/tauriService';
 import { v4 as uuid } from 'uuid';
 import styles from './ProjectEdit.module.less';
 

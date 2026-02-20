@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Card, Button, Radio, Form, Input, Select, message, Typography, Alert, Spin, Space, Tooltip } from 'antd';
 import { FileTextOutlined, RobotOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { scriptApi } from '@/services/api';
 import { v4 as uuidv4 } from 'uuid';
-import { aiService } from '@/services/aiService';
-import { useStore } from '@/store';
-import type { Script, VideoAnalysis, AIModelType, AIModel } from '@/types';
-import { AI_MODEL_INFO } from '@/types';
+import { aiService } from '@/core/services/legacy/aiService';
+import { useLegacyStore } from '@/core/stores';
+import type { Script, VideoAnalysis, AIModelType } from '@/core/types/legacy.types';
+import { AI_MODEL_INFO } from '@/core/types/legacy.types';
 import styles from './ScriptGenerator.module.less';
 
 const { Title, Paragraph } = Typography;
@@ -28,7 +27,7 @@ const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [form] = Form.useForm();
   const [generationMethod, setGenerationMethod] = useState<'auto' | 'guided'>('auto');
-  const { aiModelsSettings, selectedAIModel } = useStore();
+  const { aiModelsSettings, selectedAIModel } = useLegacyStore();
   const [selectedModel, setSelectedModel] = useState<AIModelType>(selectedAIModel);
 
   const handleGenerate = async () => {

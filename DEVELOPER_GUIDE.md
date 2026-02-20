@@ -1,8 +1,8 @@
-# BlazeCut 开发指南
+# Nova 开发指南
 
 ## 项目架构概述
 
-BlazeCut 采用前后端分离架构，前端使用 React + TypeScript，后端使用 Tauri (Rust)。
+Nova 采用前后端分离架构，前端使用 React + TypeScript，后端使用 Tauri (Rust)。
 
 ### 前端架构
 

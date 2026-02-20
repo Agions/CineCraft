@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "BlazeCut",
+    "productName": "Nova",
     "version": "0.1.0"
   },
   "tauri": {
@@ -78,7 +78,7 @@
     },
     "windows": [
       {
-        "title": "BlazeCut - 视频脚本编辑工具",
+        "title": "Nova - 视频脚本编辑工具",
         "width": 1200,
         "height": 800,
         "minWidth": 800,

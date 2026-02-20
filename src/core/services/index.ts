@@ -11,6 +11,14 @@ export { costService, CostService } from './cost.service';
 export { consistencyService, ConsistencyService } from './consistency.service';
 export { novelService, NovelService } from './novel.service';
 
+// Legacy services (to be migrated)
+export * from './legacy/aiService';
+export * from './legacy/videoService';
+export * from './legacy/exportService';
+export * from './legacy/projectService';
+export * from './legacy/tauriService';
+export * from './legacy/api';
+
 // 重新导出类型
 export type { AIResponse, RequestConfig } from './ai.service';
 export type {

@@ -9,8 +9,8 @@ import {
   ClockCircleOutlined 
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useStore } from '@/store';
-import { ensureAppDataDir } from '@/services/tauriService';
+import { useLegacyStore } from '@/core/stores';
+import { ensureAppDataDir } from '@/core/services/legacy/tauriService';
 import { formatDate, formatDuration } from '@/utils/format';
 import styles from './Projects.module.less';
 
@@ -18,7 +18,7 @@ const { Title, Text } = Typography;
 
 const Projects: React.FC = () => {
   const navigate = useNavigate();
-  const { projects, deleteProject } = useStore();
+  const { projects, deleteProject } = useLegacyStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

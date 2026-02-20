@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { AIModelType, AIModelSettings, AI_MODEL_INFO } from './types';
+import { AIModelType, AIModelSettings } from '@/core/types/legacy.types';
 
 interface AppState {
   // AI 模型相关状态
@@ -61,7 +61,7 @@ export const useStore = create<AppState>()(
       setIsDarkMode: (isDarkMode: boolean) => set({ isDarkMode })
     }),
     {
-      name: 'reelforge-store', // 存储在 localStorage 中的键名
+      name: 'nova-store', // 存储在 localStorage 中的键名
       partialize: (state) => ({
         selectedAIModel: state.selectedAIModel,
         aiModelsSettings: state.aiModelsSettings,

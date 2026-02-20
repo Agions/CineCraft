@@ -3,16 +3,16 @@
  * 统一的本地存储管理
  */
 
-import type { ProjectData, AppState, UserPreferences } from '@/core/types';
+import type { ProjectData, UserPreferences } from '@/core/types';
 
 // 存储键名
 const STORAGE_KEYS = {
-  PROJECTS: 'reelforge_projects',
-  APP_STATE: 'reelforge_app_state',
-  USER_PREFERENCES: 'reelforge_preferences',
-  RECENT_FILES: 'reelforge_recent_files',
-  MODEL_SETTINGS: 'reelforge_model_settings',
-  EXPORT_HISTORY: 'reelforge_export_history'
+  PROJECTS: 'nova_projects',
+  APP_STATE: 'nova_app_state',
+  USER_PREFERENCES: 'nova_preferences',
+  RECENT_FILES: 'nova_recent_files',
+  MODEL_SETTINGS: 'nova_model_settings',
+  EXPORT_HISTORY: 'nova_export_history'
 };
 
 class StorageService {

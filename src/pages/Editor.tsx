@@ -36,10 +36,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styles from './Editor.module.less';
 
 // 子组件
-import Timeline from '../components/editor/Timeline';
-import Preview from '../components/editor/Preview';
-import AssetPanel from '../components/editor/AssetPanel';
-import AIAssistant from '../components/editor/AIAssistant';
+import Timeline from '../components/business/editor/Timeline';
+import Preview from '../components/business/editor/Preview';
+import AssetPanel from '../components/business/editor/AssetPanel';
+import AIAssistant from '../components/business/editor/AIAssistant';
 
 const { Header, Sider, Content } = Layout;
 

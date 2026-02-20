@@ -22,7 +22,7 @@ import {
   ExportOutlined, 
   DownOutlined 
 } from '@ant-design/icons';
-import { VideoSegment, formatDuration, previewSegment } from '@/services/videoService';
+import { VideoSegment, formatDuration, previewSegment } from '@/core/services/legacy/videoService';
 import { convertFileSrc } from '@tauri-apps/api/tauri';
 import styles from './ScriptEditor.module.less';
 

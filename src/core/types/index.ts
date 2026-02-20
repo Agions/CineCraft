@@ -299,3 +299,30 @@ export interface TaskStatus {
   updatedAt: string;
   completedAt?: string;
 }
+
+// 视频剪辑
+export interface VideoClip {
+  id: string;
+  startTime: number;
+  endTime: number;
+  sourceVideoId: string;
+  sourceVideoPath: string;
+  thumbnail?: string;
+  transitions?: {
+    in?: string;
+    out?: string;
+  };
+  effects?: string[];
+}
+
+// 工作流步骤
+export type WorkflowStep = 
+  | 'upload'
+  | 'analyze'
+  | 'template'
+  | 'generate'
+  | 'dedup'
+  | 'polish'
+  | 'preview'
+  | 'edit'
+  | 'export';

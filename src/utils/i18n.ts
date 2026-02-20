@@ -77,7 +77,7 @@ const translations: Translations = {
   },
   en: {
     // 通用
-    'app.name': 'BlazeCut',
+    'app.name': 'Nova',
     'app.save': 'Save',
     'app.cancel': 'Cancel',
     'app.confirm': 'Confirm',

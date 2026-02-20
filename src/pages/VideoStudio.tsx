@@ -20,11 +20,11 @@ import { zh } from 'date-fns/locale';
 import styles from './VideoStudio.module.less';
 
 // 导入组件和服务
-import VideoPlayer from '@/components/VideoPlayer';
-import ScriptEditor from '@/components/ScriptEditor';
-import VideoProcessController from '@/components/VideoProcessController';
-import { loadProjectFromFile } from '@/services/tauriService';
-import type { Project, VideoMetadata, Script } from '@/types';
+import VideoPlayer from '@/components/business/VideoPlayer';
+import ScriptEditor from '@/components/business/ScriptEditor';
+import VideoProcessController from '@/components/business/VideoProcessingController';
+import { loadProjectFromFile } from '@/core/services/legacy/tauriService';
+import type { Project, VideoMetadata, Script } from '@/core/types/legacy.types';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;

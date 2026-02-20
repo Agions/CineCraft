@@ -25,8 +25,8 @@ import {
   FireOutlined
 } from '@ant-design/icons';
 import { useTheme } from '@/context/ThemeContext';
-import { useAppStore } from '@/store/app';
-import NotificationCenter from '@/components/NotificationCenter';
+import { useAppStore } from '@/core/stores';
+import NotificationCenter from '@/components/business/NotificationCenter';
 import styles from './MainLayout.module.less';
 
 const { Header, Sider, Content } = Layout;
@@ -44,7 +44,7 @@ const Footer = () => (
         <a href="/terms" target="_blank">使用条款</a>
       </div>
       <div className={styles.copyright}>
-        <Text type="secondary">BlazeCut © {new Date().getFullYear()} Created by Agions</Text>
+        <Text type="secondary">Nova © {new Date().getFullYear()} Created by Agions</Text>
       </div>
     </div>
   </div>
@@ -162,7 +162,7 @@ const MainLayout: React.FC = () => {
     if (path.startsWith('/scripts')) return '剧本管理';
     if (path.startsWith('/templates')) return '模板中心';
     if (path.startsWith('/settings')) return '系统设置';
-    return 'BlazeCut';
+    return 'Nova';
   };
 
   const renderMenu = () => (
@@ -195,7 +195,7 @@ const MainLayout: React.FC = () => {
           )}
           <div className={styles.logo} onClick={() => navigate('/')}>
             <FireOutlined className={styles.logoIcon} />
-            <span className={styles.logoText}>BlazeCut</span>
+            <span className={styles.logoText}>Nova</span>
           </div>
           {!isMobile && (
             <div className={styles.pageTitle}>
@@ -255,7 +255,7 @@ const MainLayout: React.FC = () => {
             title={
               <div className={styles.drawerHeader}>
                 <FireOutlined className={styles.logoIcon} />
-                <span className={styles.logoText}>BlazeCut</span>
+                <span className={styles.logoText}>Nova</span>
               </div>
             }
             placement="left"

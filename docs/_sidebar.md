@@ -1,4 +1,4 @@
-# BlazeCut 文档
+# Nova 文档
 
 * [首页](README.md)
 * [开发者指南](DEVELOPER_GUIDE.md)

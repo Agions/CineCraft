@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, List, Typography, Button, Empty } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
-import { useAppStore } from '@/store/app';
+import { useAppStore } from '@/core/stores';
 import styles from './NotificationCenter.module.less';
 
 interface NotificationCenterProps {

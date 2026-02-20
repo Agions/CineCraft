@@ -17,8 +17,8 @@ import { open } from '@tauri-apps/api/dialog';
 import styles from './VideoEditor.module.less';
 
 // 导入组件和服务
-import { VideoSegment, extractKeyFrames, generateThumbnail, analyzeVideo } from '@/services/videoService';
-import { saveProjectFile } from '@/services/projectService';
+import { VideoSegment, extractKeyFrames, generateThumbnail, analyzeVideo } from '@/core/services/legacy/videoService';
+import { saveProjectFile } from '@/core/services/legacy/projectService';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;

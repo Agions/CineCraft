@@ -30,14 +30,12 @@ import {
   PauseCircleOutlined,
   ReloadOutlined
 } from '@ant-design/icons';
-import { useWorkflow, useModel } from '@/core/hooks';
-import { scriptTemplateService } from '@/core/services';
-import { VideoUploader } from '@/components/VideoUploader';
-import { ModelSelector } from '@/components/ModelSelector';
-import { ScriptEditor } from '@/components/ScriptEditor';
-import { VideoTimeline } from '@/components/VideoTimeline';
-import { ExportPanel } from '@/components/ExportPanel';
-import type { WorkflowStep, ScriptTemplate, AIModel } from '@/core/types';
+import { useModel } from '@/core/hooks';
+import { VideoUploader } from '@/components/business/VideoUploader';
+import { ModelSelector } from '@/components/business/ModelSelector';
+import { ScriptEditor } from '@/components/business/ScriptEditor';
+import { ExportPanel } from '@/components/business/ExportPanel';
+import type { ScriptTemplate, AIModel } from '@/core/types';
 
 import styles from './index.module.less';
 

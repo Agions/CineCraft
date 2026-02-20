@@ -12,13 +12,12 @@ import {
   ScissorOutlined
 } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
-import { useStore } from '@/store';
-import VideoInfo from '@/components/VideoInfo';
-import ScriptEditor from '@/components/ScriptEditor';
-import VideoEditor from '@/components/VideoEditor';
-import { exportScriptToFile, saveProjectToFile, getApiKey } from '@/services/tauriService';
-import { generateScript, polishScript } from '@/services/ai';
-import { generateScriptWithModel, parseGeneratedScript } from '@/services/aiService';
+import { useLegacyStore } from '@/core/stores';
+import VideoInfo from '@/components/business/VideoInfo';
+import ScriptEditor from '@/components/business/ScriptEditor';
+import VideoEditor from '@/components/business/VideoEditor';
+import { exportScriptToFile, saveProjectToFile, getApiKey } from '@/core/services/legacy/tauriService';
+import { generateScriptWithModel, parseGeneratedScript } from '@/core/services/legacy/aiService';
 import styles from './ProjectDetail.module.less';
 
 const { Title, Text } = Typography;
@@ -28,7 +27,7 @@ const { Option } = Select;
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { projects, updateProject, deleteProject, selectedAIModel, aiModelsSettings } = useStore();
+  const { projects, updateProject, deleteProject, selectedAIModel, aiModelsSettings } = useLegacyStore();
   const [loading, setLoading] = useState(true);
   const [aiLoading, setAiLoading] = useState(false);
   const [project, setProject] = useState<any>(null);

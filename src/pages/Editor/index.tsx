@@ -40,8 +40,7 @@ import {
   FolderOpenOutlined
 } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEditor } from '@/core/hooks';
-import type { VideoClip, ExportSettings } from '@/core/types';
+import type { ExportSettings } from '@/core/types';
 import styles from './index.module.less';
 
 const { Content, Sider } = Layout;

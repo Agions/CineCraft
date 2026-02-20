@@ -60,7 +60,7 @@ import {
 } from '@ant-design/icons';
 import styles from './Settings.module.less';
 import ThemeContext from '../context/ThemeContext';
-import AIModelSelector from '../components/AIModelSelector';
+import AIModelSelector from '../components/business/AIModelSelector';
 import useTranslation from '../utils/i18n';
 
 // 手动定义ModelProvider类型
@@ -922,7 +922,7 @@ const Settings: React.FC = () => {
               <h3 className={styles.sectionTitle}>数据存储</h3>
               
               <Paragraph>
-                BlazeCut高度重视您的隐私。所有API密钥和个人设置仅存储在您的本地设备上，没有任何数据会传输到我们的服务器。
+                Nova高度重视您的隐私。所有API密钥和个人设置仅存储在您的本地设备上，没有任何数据会传输到我们的服务器。
               </Paragraph>
               
               <Paragraph style={{ marginBottom: 24 }}>
@@ -933,9 +933,9 @@ const Settings: React.FC = () => {
                 message="本地存储位置"
                 description={
                   <div style={{ marginTop: 8 }}>
-                    <Text code>~/Library/Application Support/BlazeCut</Text> (macOS)<br />
-                    <Text code>%APPDATA%\BlazeCut</Text> (Windows)<br />
-                    <Text code>~/.config/BlazeCut</Text> (Linux)
+                    <Text code>~/Library/Application Support/Nova</Text> (macOS)<br />
+                    <Text code>%APPDATA%\Nova</Text> (Windows)<br />
+                    <Text code>~/.config/Nova</Text> (Linux)
                   </div>
                 }
                 type="info"

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import { message, notification } from 'antd';
-import Layout from './components/Layout';
+import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import ProjectEdit from './pages/ProjectEdit';
 import ProjectDetail from './pages/ProjectDetail';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button, Table, Space, Modal, Input, Tag, Typography, Empty, Tooltip, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ExportOutlined, VideoCameraOutlined, FileTextOutlined } from '@ant-design/icons';
-import { getAppData, saveAppData } from '@/services/tauriService';
+import { getAppData, saveAppData } from '@/core/services/legacy/tauriService';
 import { formatDate, formatDuration } from '@/utils/format';
 import styles from './ProjectList.module.less';
 
