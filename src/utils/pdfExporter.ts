@@ -73,8 +73,8 @@ export const exportScriptToPDF = (script: Script, projectName: string) => {
     },
   });
   
-  // 添加页脚
-  const pageCount = doc.internal.getNumberOfPages();
+  // 添加页脚 - 使用 pages 数组长度获取页数
+  const pageCount = (doc.internal as any).pages.length - 1;
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.setFontSize(8);

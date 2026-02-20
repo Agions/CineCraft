@@ -8,6 +8,8 @@ export { useVideo } from './useVideo';
 export { useSmartModel } from './useSmartModel';
 export { useConsistency } from './useConsistency';
 export { useNovel } from './useNovel';
+export { useWorkflow } from './useWorkflow';
+export type { WorkflowStep, WorkflowState, WorkflowData, UseWorkflowReturn } from './useWorkflow';
 
 // 重新导出便于使用
 export type { UseModelReturn, UseModelCostReturn } from './useModel';

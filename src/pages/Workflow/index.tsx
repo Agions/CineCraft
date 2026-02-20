@@ -30,11 +30,14 @@ import {
   PauseCircleOutlined,
   ReloadOutlined
 } from '@ant-design/icons';
-import { useModel } from '@/core/hooks';
-import { VideoUploader } from '@/components/business/VideoUploader';
+import { useModel, useWorkflow } from '@/core/hooks';
+import { scriptTemplateService } from '@/core/services';
+import type { WorkflowStep } from '@/core/hooks';
+import VideoUploader from '@/components/business/VideoUploader';
 import { ModelSelector } from '@/components/business/ModelSelector';
-import { ScriptEditor } from '@/components/business/ScriptEditor';
-import { ExportPanel } from '@/components/business/ExportPanel';
+import ScriptEditor from '@/components/business/ScriptEditor';
+import ExportPanel from '@/components/business/ExportPanel';
+import { VideoTimeline } from '@/components/business/VideoTimeline';
 import type { ScriptTemplate, AIModel } from '@/core/types';
 
 import styles from './index.module.less';
@@ -158,11 +161,11 @@ export const WorkflowPage: React.FC = () => {
   });
 
   // 模型列表
-  const { models } = useModel();
+  const { allModels: models } = useModel();
 
   // 模板列表
   const templates = scriptTemplateService.getAllTemplates();
-  const categories = scriptTemplateService.getCategories();
+  const _categories = scriptTemplateService.getCategories();
 
   // 获取当前步骤索引
   const currentStepIndex = WORKFLOW_STEPS.findIndex(s => s.key === currentStep);
@@ -285,9 +288,11 @@ export const WorkflowPage: React.FC = () => {
           <Card title="生成脚本" className={styles.stepCard}>
             <Space direction="vertical" style={{ width: '100%' }} size="large">
               <ModelSelector
-                models={models}
-                selected={selectedModel}
-                onSelect={setSelectedModel}
+                onSelect={(modelId) => {
+                  const model = models.find(m => m.id === modelId);
+                  setSelectedModel(model || null);
+                }}
+                taskType="script"
               />
 
               <Card size="small" title="脚本参数">
