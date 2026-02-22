@@ -13,6 +13,7 @@ export { novelService, NovelService } from './novel.service';
 export { scriptTemplateService, ScriptTemplateService } from './scriptTemplate.service';
 export { lipSyncService, LipSyncService } from './lip-sync.service';
 export { enhancedDramaWorkflowService, EnhancedDramaWorkflowService } from './enhanced-drama-workflow.service';
+export { originalityService, OriginalityService } from './originality.service';
 
 // 工作流增强
 export {
