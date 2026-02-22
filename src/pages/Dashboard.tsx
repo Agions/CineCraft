@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * 专业仪表盘首页
+ * 展示项目统计、最近活动、快捷操作
+ */
+
+import React, { useState } from 'react';
 import { 
   Row, 
   Col, 
@@ -9,478 +14,390 @@ import {
   Statistic, 
   List, 
   Avatar, 
-  Dropdown, 
   Tag, 
-  Empty, 
-  Tooltip,
-  Input,
-  Segmented
+  Progress,
+  Timeline,
+  Empty,
+  Carousel,
+  Badge
 } from 'antd';
 import { 
   PlusOutlined, 
-  ClockCircleOutlined, 
-  FireOutlined, 
   VideoCameraOutlined, 
-  BarChartOutlined, 
-  MoreOutlined, 
-  CloudUploadOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  CopyOutlined,
-  FolderOutlined,
+  FileTextOutlined,
+  ClockCircleOutlined,
+  FireOutlined,
+  RightOutlined,
+  PlayCircleOutlined,
+  CheckCircleOutlined,
+  SyncOutlined,
+  UserOutlined,
+  ThunderboltOutlined,
   StarOutlined,
-  StarFilled,
-  AppstoreOutlined,
-  BarsOutlined,
-  SearchOutlined
+  HistoryOutlined,
+  ArrowUpOutlined,
+  ArrowRightOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import styles from './Dashboard.module.less';
 
 const { Title, Text, Paragraph } = Typography;
-const { Search } = Input;
 
-interface Project {
-  id: string;
-  title: string;
-  thumbnail: string;
-  duration: number;
-  updatedAt: Date;
-  size: number;
-  starred: boolean;
-  tags: string[];
-}
+// 统计数据
+const statsData = [
+  { 
+    title: '项目总数', 
+    value: 12, 
+    icon: <VideoCameraOutlined />, 
+    color: '#6366f1',
+    trend: '+3',
+    trendUp: true
+  },
+  { 
+    title: '进行中', 
+    value: 3, 
+    icon: <SyncOutlined spin />, 
+    color: '#f59e0b',
+    trend: '0',
+    trendUp: false
+  },
+  { 
+    title: '已完成', 
+    value: 8, 
+    icon: <CheckCircleOutlined />, 
+    color: '#10b981',
+    trend: '+2',
+    trendUp: true
+  },
+  { 
+    title: '本月产出', 
+    value: 156, 
+    icon: <ThunderboltOutlined />, 
+    color: '#ec4899',
+    trend: '+18%',
+    trendUp: true
+  },
+];
 
-const mockProjects: Project[] = [
+// 最近项目
+const recentProjects = [
   {
     id: '1',
-    title: '热门短剧《再见爱人》片段1',
-    thumbnail: 'https://picsum.photos/300/169?random=1',
-    duration: 75, // 秒
-    updatedAt: new Date(2025, 4, 15, 14, 30),
-    size: 45.8, // MB
-    starred: true,
-    tags: ['情感', '热门']
+    title: '星辰大海',
+    description: '科幻漫剧第一集',
+    thumbnail: 'https://picsum.photos/seed/drama1/400/225',
+    progress: 75,
+    status: '进行中',
+    updateTime: '2小时前',
+    episodes: 3
   },
   {
     id: '2',
-    title: '搞笑段子合集：春节特辑',
-    thumbnail: 'https://picsum.photos/300/169?random=2',
-    duration: 120,
-    updatedAt: new Date(2025, 4, 14, 9, 15),
-    size: 68.2,
-    starred: false,
-    tags: ['搞笑', '节日']
+    title: '都市恋曲',
+    description: '浪漫爱情漫剧',
+    thumbnail: 'https://picsum.photos/seed/drama2/400/225',
+    progress: 100,
+    status: '已完成',
+    updateTime: '昨天',
+    episodes: 5
   },
   {
     id: '3',
-    title: '城市日出航拍素材',
-    thumbnail: 'https://picsum.photos/300/169?random=3',
-    duration: 45,
-    updatedAt: new Date(2025, 4, 12, 16, 45),
-    size: 102.5,
-    starred: true,
-    tags: ['风景', '航拍']
+    title: '修仙传',
+    description: '玄幻仙侠漫剧',
+    thumbnail: 'https://picsum.photos/seed/drama3/400/225',
+    progress: 45,
+    status: '进行中',
+    updateTime: '3天前',
+    episodes: 2
+  },
+];
+
+// 最近活动
+const recentActivities = [
+  {
+    id: '1',
+    action: '生成了角色设计',
+    project: '星辰大海',
+    time: '10分钟前',
+    icon: <UserOutlined />,
+    color: '#6366f1'
+  },
+  {
+    id: '2',
+    action: '完成了分镜设计',
+    project: '都市恋曲',
+    time: '2小时前',
+    icon: <FileTextOutlined />,
+    color: '#10b981'
+  },
+  {
+    id: '3',
+    action: '导出了视频',
+    project: '都市恋曲',
+    time: '昨天',
+    icon: <VideoCameraOutlined />,
+    color: '#ec4899'
   },
   {
     id: '4',
-    title: '《都市传说》第三集片段',
-    thumbnail: 'https://picsum.photos/300/169?random=4',
-    duration: 90,
-    updatedAt: new Date(2025, 4, 10, 11, 20),
-    size: 54.1,
-    starred: false,
-    tags: ['剧情', '悬疑']
+    action: '上传了小说',
+    project: '修仙传',
+    time: '3天前',
+    icon: <PlusOutlined />,
+    color: '#f59e0b'
   },
-  {
-    id: '5',
-    title: '产品宣传片：智能家居',
-    thumbnail: 'https://picsum.photos/300/169?random=5',
-    duration: 60,
-    updatedAt: new Date(2025, 4, 8, 10, 30),
-    size: 38.7,
-    starred: false,
-    tags: ['商业', '科技']
-  },
-  {
-    id: '6',
-    title: '旅行Vlog：桂林山水',
-    thumbnail: 'https://picsum.photos/300/169?random=6',
-    duration: 180,
-    updatedAt: new Date(2025, 4, 5, 18, 10),
-    size: 215.3,
-    starred: true,
-    tags: ['旅行', 'Vlog']
-  }
 ];
 
-// 格式化时间显示
-const formatTime = (date: Date): string => {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-  if (diffDays === 0) {
-    return '今天 ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-  } else if (diffDays === 1) {
-    return '昨天 ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-  } else if (diffDays < 7) {
-    return `${diffDays}天前`;
-  } else {
-    return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
-  }
-};
-
-// 格式化时长显示
-const formatDuration = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-};
+// 快捷操作
+const quickActions = [
+  {
+    key: 'novel',
+    title: '小说漫剧',
+    description: '上传小说生成漫剧',
+    icon: <FileTextOutlined />,
+    color: '#6366f1',
+    gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'
+  },
+  {
+    key: 'manga',
+    title: '漫画视频',
+    description: '漫画转视频',
+    icon: <PlayCircleOutlined />,
+    color: '#ec4899',
+    gradient: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)'
+  },
+  {
+    key: 'template',
+    title: '模板创作',
+    description: '使用模板创建',
+    icon: <ThunderboltOutlined />,
+    color: '#14b8a6',
+    gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)'
+  },
+  {
+    key: 'continue',
+    title: '继续创作',
+    description: '从上次继续',
+    icon: <ClockCircleOutlined />,
+    color: '#f59e0b',
+    gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+  },
+];
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<Project[]>(mockProjects);
-  const [viewMode, setViewMode] = useState<string | number>('grid');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
-  
-  // 统计数据
-  const totalProjects = projects.length;
-  const totalDuration = projects.reduce((sum, project) => sum + project.duration, 0);
-  const totalSize = projects.reduce((sum, project) => sum + project.size, 0);
-  
-  // 搜索和过滤项目
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredProjects(projects);
-    } else {
-      const filtered = projects.filter(project => 
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
-      setFilteredProjects(filtered);
-    }
-  }, [searchQuery, projects]);
-  
-  // 切换收藏状态
-  const toggleStar = (id: string) => {
-    setProjects(projects.map(project => 
-      project.id === id 
-        ? { ...project, starred: !project.starred } 
-        : project
-    ));
-  };
-  
-  // 删除项目
-  const deleteProject = (id: string) => {
-    setProjects(projects.filter(project => project.id !== id));
-  };
-  
-  // 创建新项目
-  const createNewProject = () => {
-    navigate('/editor/new');
-  };
-  
-  // 打开项目
-  const openProject = (id: string) => {
-    navigate(`/editor/${id}`);
-  };
-  
-  // 项目操作菜单
-  const projectMenu = (id: string) => ({
-    items: [
-      {
-        key: '1',
-        label: '编辑项目',
-        icon: <EditOutlined />,
-        onClick: () => openProject(id)
-      },
-      {
-        key: '2',
-        label: '复制项目',
-        icon: <CopyOutlined />,
-        onClick: () => console.log('复制项目', id)
-      },
-      {
-        key: '3',
-        label: '删除项目',
-        icon: <DeleteOutlined />,
-        danger: true,
-        onClick: () => deleteProject(id)
-      },
-    ],
-  });
-  
-  // 渲染网格视图中的项目卡片
-  const renderGridItem = (project: Project) => (
-    <Col xs={24} sm={12} md={8} lg={6} key={project.id}>
-      <Card 
-        className={styles.projectCard}
-        cover={
-          <div className={styles.thumbnailContainer}>
-            <img 
-              alt={project.title} 
-              src={project.thumbnail} 
-              className={styles.thumbnail}
-              onClick={() => openProject(project.id)}
-            />
-            <div className={styles.duration}>
-              {formatDuration(project.duration)}
-            </div>
-            <Button 
-              className={styles.starButton}
-              type="text" 
-              icon={project.starred ? <StarFilled style={{ color: '#faad14' }} /> : <StarOutlined />} 
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleStar(project.id);
-              }}
-            />
-          </div>
-        }
-        actions={[
-          <Tooltip title="编辑项目">
-            <Button 
-              type="text" 
-              icon={<EditOutlined />} 
-              onClick={() => openProject(project.id)}
-            />
-          </Tooltip>,
-          <Tooltip title="导出视频">
-            <Button 
-              type="text" 
-              icon={<CloudUploadOutlined />} 
-              onClick={() => console.log('导出', project.id)}
-            />
-          </Tooltip>,
-          <Dropdown menu={projectMenu(project.id)} placement="bottomRight" trigger={['click']}>
-            <Button type="text" icon={<MoreOutlined />} />
-          </Dropdown>
-        ]}
-      >
-        <Card.Meta
-          title={
-            <Tooltip title={project.title}>
-              <div className={styles.projectTitle}>{project.title}</div>
-            </Tooltip>
-          }
-          description={
-            <Space direction="vertical" size={0} style={{ width: '100%' }}>
-              <div className={styles.projectInfo}>
-                <Text type="secondary">{formatTime(project.updatedAt)}</Text>
-                <Text type="secondary">{project.size.toFixed(1)} MB</Text>
-              </div>
-              <div className={styles.projectTags}>
-                {project.tags.map(tag => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
-              </div>
-            </Space>
-          }
-        />
-      </Card>
-    </Col>
-  );
-  
-  // 渲染列表视图中的项目
-  const renderListItem = (project: Project) => (
-    <List.Item
-      key={project.id}
-      actions={[
-        <Button
-          type="text"
-          icon={project.starred ? <StarFilled style={{ color: '#faad14' }} /> : <StarOutlined />}
-          onClick={() => toggleStar(project.id)}
-        />,
-        <Button
-          type="text"
-          icon={<EditOutlined />}
-          onClick={() => openProject(project.id)}
-        />,
-        <Button
-          type="text"
-          icon={<CloudUploadOutlined />}
-          onClick={() => console.log('导出', project.id)}
-        />,
-        <Dropdown menu={projectMenu(project.id)} placement="bottomRight" trigger={['click']}>
-          <Button type="text" icon={<MoreOutlined />} />
-        </Dropdown>
-      ]}
-    >
-      <List.Item.Meta
-        avatar={
-          <div className={styles.listThumbnailContainer}>
-            <img 
-              alt={project.title} 
-              src={project.thumbnail} 
-              className={styles.listThumbnail}
-            />
-            <div className={styles.listDuration}>
-              {formatDuration(project.duration)}
-            </div>
-          </div>
-        }
-        title={<a onClick={() => openProject(project.id)}>{project.title}</a>}
-        description={
-          <Space direction="vertical" size={2} style={{ width: '100%' }}>
-            <div className={styles.projectInfo}>
-              <Text type="secondary">更新于: {formatTime(project.updatedAt)}</Text>
-              <Text type="secondary">大小: {project.size.toFixed(1)} MB</Text>
-            </div>
-            <div className={styles.projectTags}>
-              {project.tags.map(tag => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </div>
-          </Space>
-        }
-      />
-    </List.Item>
-  );
-  
+
   return (
-    <div className={styles.dashboardContainer}>
-      <div className={styles.dashboardHeader}>
-        <div>
-          <Title level={2}>我的项目</Title>
-          <Paragraph type="secondary">管理和编辑您的短视频项目</Paragraph>
+    <div className={styles.dashboard}>
+      {/* 欢迎区 */}
+      <div className={styles.welcomeSection}>
+        <div className={styles.welcomeContent}>
+          <Title level={2} className={styles.welcomeTitle}>
+            欢迎回来，創作者 👋
+          </Title>
+          <Text className={styles.welcomeDesc}>
+            今天想创作什么样的漫剧呢？
+          </Text>
         </div>
-        <Button
-          type="primary"
-          size="large"
+        <Button 
+          type="primary" 
+          size="large" 
           icon={<PlusOutlined />}
-          onClick={createNewProject}
-          className={styles.newProjectButton}
+          className={styles.createBtn}
+          onClick={() => navigate('/workflow')}
         >
-          新建项目
+          创建新项目
         </Button>
       </div>
-      
-      {/* 统计数据 */}
-      <Row gutter={16} className={styles.statsRow}>
-        <Col xs={24} sm={8}>
-          <Card>
-            <Statistic
-              title="项目总数"
-              value={totalProjects}
-              prefix={<FolderOutlined />}
-              className={styles.statistic}
+
+      {/* 统计卡片 */}
+      <Row gutter={[16, 16]} className={styles.statsRow}>
+        {statsData.map((stat, index) => (
+          <Col xs={24} sm={12} lg={6} key={index}>
+            <Card className={styles.statCard} hoverable>
+              <div className={styles.statContent}>
+                <div 
+                  className={styles.statIcon} 
+                  style={{ backgroundColor: `${stat.color}15`, color: stat.color }}
+                >
+                  {stat.icon}
+                </div>
+                <div className={styles.statInfo}>
+                  <Text className={styles.statTitle}>{stat.title}</Text>
+                  <div className={styles.statValueRow}>
+                    <Statistic 
+                      value={stat.value} 
+                      className={styles.statValue}
+                      valueStyle={{ color: stat.color, fontWeight: 600 }}
+                    />
+                    {stat.trend && (
+                      <Tag 
+                        color={stat.trendUp ? 'success' : 'default'}
+                        className={styles.statTrend}
+                      >
+                        {stat.trendUp ? <ArrowUpOutlined /> : null} {stat.trend}
+                      </Tag>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      <Row gutter={[24, 24]}>
+        {/* 快捷操作 */}
+        <Col xs={24} lg={8}>
+          <Card 
+            title="快捷开始" 
+            className={styles.quickStartCard}
+            extra={<a href="#">查看全部 <RightOutlined /></a>}
+          >
+            <Row gutter={[12, 12]}>
+              {quickActions.map((action) => (
+                <Col span={12} key={action.key}>
+                  <div 
+                    className={styles.quickActionItem}
+                    onClick={() => navigate('/workflow')}
+                  >
+                    <div 
+                      className={styles.quickActionIcon}
+                      style={{ background: action.gradient }}
+                    >
+                      {action.icon}
+                    </div>
+                    <div className={styles.quickActionInfo}>
+                      <div className={styles.quickActionTitle}>{action.title}</div>
+                      <div className={styles.quickActionDesc}>{action.description}</div>
+                    </div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Card>
+        </Col>
+
+        {/* 最近项目 */}
+        <Col xs={24} lg={10}>
+          <Card 
+            title="最近项目" 
+            className={styles.recentProjectsCard}
+            extra={<a href="/projects">查看全部 <RightOutlined /></a>}
+          >
+            <List
+              itemLayout="horizontal"
+              dataSource={recentProjects}
+              renderItem={(project) => (
+                <List.Item 
+                  className={styles.projectItem}
+                  actions={[
+                    <Button type="text" key="more">
+                      <RightOutlined />
+                    </Button>
+                  ]}
+                >
+                  <List.Item.Meta
+                    avatar={
+                      <div className={styles.projectThumb}>
+                        <img src={project.thumbnail} alt={project.title} />
+                        <div className={styles.projectProgress}>
+                          <Progress 
+                            percent={project.progress} 
+                            size="small"
+                            showInfo={false}
+                            strokeColor="#6366f1"
+                          />
+                        </div>
+                      </div>
+                    }
+                    title={
+                      <div className={styles.projectTitle}>
+                        {project.title}
+                        {project.status === '已完成' && (
+                          <CheckCircleOutlined style={{ color: '#10b981', marginLeft: 8 }} />
+                        )}
+                      </div>
+                    }
+                    description={
+                      <div className={styles.projectDesc}>
+                        <Text type="secondary">{project.description}</Text>
+                        <span className={styles.projectMeta}>
+                          {project.episodes}集 · {project.updateTime}
+                        </span>
+                      </div>
+                    }
+                  />
+                </List.Item>
+              )}
             />
           </Card>
         </Col>
-        <Col xs={24} sm={8}>
-          <Card>
-            <Statistic
-              title="总时长"
-              value={(totalDuration / 60).toFixed(1)}
-              suffix="分钟"
-              prefix={<ClockCircleOutlined />}
-              className={styles.statistic}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={8}>
-          <Card>
-            <Statistic
-              title="存储容量"
-              value={(totalSize / 1024).toFixed(2)}
-              suffix="GB"
-              prefix={<BarChartOutlined />}
-              className={styles.statistic}
+
+        {/* 活动 timeline */}
+        <Col xs={24} lg={6}>
+          <Card 
+            title="最近活动" 
+            className={styles.activityCard}
+          >
+            <Timeline
+              items={recentActivities.map(activity => ({
+                color: activity.color,
+                children: (
+                  <div className={styles.activityItem}>
+                    <div className={styles.activityAction}>{activity.action}</div>
+                    <div className={styles.activityProject}>{activity.project}</div>
+                    <div className={styles.activityTime}>{activity.time}</div>
+                  </div>
+                )
+              }))}
             />
           </Card>
         </Col>
       </Row>
-      
-      {/* 项目筛选工具栏 */}
-      <div className={styles.projectToolbar}>
-        <Search
-          placeholder="搜索项目..."
-          allowClear
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: 250 }}
-          prefix={<SearchOutlined />}
-        />
-        <Segmented
-          options={[
-            {
-              value: 'grid',
-              icon: <AppstoreOutlined />,
-            },
-            {
-              value: 'list',
-              icon: <BarsOutlined />,
-            },
-          ]}
-          value={viewMode}
-          onChange={setViewMode}
-        />
-      </div>
-      
-      {/* 项目列表 */}
-      {filteredProjects.length > 0 ? (
-        viewMode === 'grid' ? (
-          <Row gutter={[16, 16]} className={styles.projectGrid}>
-            {filteredProjects.map(renderGridItem)}
-          </Row>
-        ) : (
-          <List
-            itemLayout="horizontal"
-            dataSource={filteredProjects}
-            renderItem={renderListItem}
-            className={styles.projectList}
-          />
-        )
-      ) : (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={
-            searchQuery ? "没有找到匹配的项目" : "还没有创建任何项目"
-          }
-          className={styles.emptyState}
-        >
-          <Button type="primary" icon={<PlusOutlined />} onClick={createNewProject}>
-            创建第一个项目
-          </Button>
-        </Empty>
-      )}
-      
-      {/* 快速工具 */}
-      <Card title="快速工具" className={styles.quickTools}>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={8} md={6}>
-            <Card className={styles.toolCard} onClick={() => navigate('/templates')}>
-              <VideoCameraOutlined className={styles.toolIcon} />
-              <div className={styles.toolTitle}>模板库</div>
-              <div className={styles.toolDesc}>使用专业模板快速创建</div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={8} md={6}>
-            <Card className={styles.toolCard} onClick={() => navigate('/assets')}>
-              <FolderOutlined className={styles.toolIcon} />
-              <div className={styles.toolTitle}>素材库</div>
-              <div className={styles.toolDesc}>管理您的视频素材</div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={8} md={6}>
-            <Card className={styles.toolCard} onClick={() => navigate('/ai-tools')}>
-              <FireOutlined className={styles.toolIcon} />
-              <div className={styles.toolTitle}>AI 助手</div>
-              <div className={styles.toolDesc}>智能生成内容与剪辑</div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={8} md={6}>
-            <Card className={styles.toolCard} onClick={() => navigate('/settings')}>
-              <BarChartOutlined className={styles.toolIcon} />
-              <div className={styles.toolTitle}>数据分析</div>
-              <div className={styles.toolDesc}>查看您的创作数据</div>
-            </Card>
-          </Col>
-        </Row>
-      </Card>
+
+      {/* 项目进度 */}
+      <Row gutter={[24, 24]} className={styles.progressSection}>
+        <Col xs={24}>
+          <Card title="进行中的项目" className={styles.progressCard}>
+            <Row gutter={[16, 16]}>
+              {recentProjects.filter(p => p.status === '进行中').map((project) => (
+                <Col xs={24} sm={8} key={project.id}>
+                  <div className={styles.progressItem}>
+                    <div className={styles.progressThumb}>
+                      <img src={project.thumbnail} alt={project.title} />
+                      <div className={styles.progressOverlay}>
+                        <Button 
+                          type="primary" 
+                          shape="circle" 
+                          icon={<PlayCircleOutlined />}
+                          className={styles.playBtn}
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.progressInfo}>
+                      <Title level={5} className={styles.progressTitle}>
+                        {project.title}
+                      </Title>
+                      <Progress 
+                        percent={project.progress} 
+                        size="small"
+                        strokeColor="#6366f1"
+                      />
+                      <Text type="secondary" className={styles.progressDesc}>
+                        {project.description}
+                      </Text>
+                    </div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
