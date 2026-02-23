@@ -12,7 +12,7 @@ export { useWorkflow } from './useWorkflow';
 export type { WorkflowStep, WorkflowState, WorkflowData, UseWorkflowReturn } from './useWorkflow';
 
 // 重新导出便于使用
-export type { UseModelReturn, UseModelCostReturn } from './useModel';
+export type { UseModelReturn } from './useModel';
 export type { UseProjectReturn } from './useProject';
 export type { UseVideoReturn } from './useVideo';
 export type { SmartGenerateResult, SmartGenerateOptions, UsageStats } from './useSmartModel';

@@ -136,7 +136,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
       // 调用 AI 服务
       const script = await aiService.generateScript(
         selectedModel,
-        { apiKey: 'mock-key' }, // 实际应从配置获取
+        { enabled: true, apiKey: 'mock-key' }, // 实际应从配置获取
         { ...values, videoDuration }
       );
 

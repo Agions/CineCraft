@@ -58,8 +58,10 @@ const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
       // 创建脚本对象
       const script: Script = {
         id: uuidv4(),
+        title: formValues.title || '未命名脚本',
         videoId: projectId,
-        content: scriptSegments.map(segment => ({
+        content: scriptContent, // 原始内容文本
+        segments: scriptSegments.map((segment: any) => ({
           ...segment,
           id: uuidv4()
         })),
@@ -191,9 +193,9 @@ const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
             label="重点关注"
           >
             <Select mode="multiple" placeholder="选择要重点关注的内容">
-              {analysis.keyMoments.map((moment, index) => (
+              {analysis.keyMoments?.map((moment, index) => (
                 <Option key={index} value={index}>
-                  {moment.description} ({Math.floor(moment.timestamp / 60)}:{moment.timestamp % 60})
+                  {moment.description} ({Math.floor(moment.time / 60)}:{String(moment.time % 60).padStart(2, '0')})
                 </Option>
               ))}
             </Select>

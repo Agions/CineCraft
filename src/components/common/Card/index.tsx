@@ -4,11 +4,12 @@
  */
 
 import React from 'react';
-import { Card as AntCard, CardProps as AntCardProps } from 'antd';
+import { Card as AntCard } from 'antd';
 import classNames from 'classnames';
 import styles from './index.module.less';
 
-interface CardProps extends AntCardProps {
+// 简化接口，避免与 antd 冲突
+interface CardProps {
   /** 是否可悬停 */
   hoverable?: boolean;
   /** 是否选中 */
@@ -19,6 +20,16 @@ interface CardProps extends AntCardProps {
   size?: 'small' | 'default' | 'large';
   /** 变体 */
   variant?: 'default' | 'outlined' | 'filled';
+  /** 标题 */
+  title?: React.ReactNode;
+  /** 额外内容 */
+  extra?: React.ReactNode;
+  /** 内容 */
+  children?: React.ReactNode;
+  /** body样式 */
+  bodyStyle?: React.CSSProperties;
+  /** 其他 antd Card 属性 */
+  [key: string]: any;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -34,8 +45,6 @@ export const Card: React.FC<CardProps> = ({
     <AntCard
       className={classNames(
         styles.card,
-        styles[size],
-        styles[variant],
         {
           [styles.hoverable]: hoverable,
           [styles.selected]: selected

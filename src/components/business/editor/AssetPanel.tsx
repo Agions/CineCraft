@@ -180,7 +180,7 @@ const AssetPanel: React.FC<AssetPanelProps> = () => {
   };
   
   // 素材项操作菜单
-  const assetMenu = (id: string) => ({
+  const assetMenu = (id: string): any => ({
     items: [
       {
         key: '1',

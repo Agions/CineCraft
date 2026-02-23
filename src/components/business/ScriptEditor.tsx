@@ -26,11 +26,20 @@ import { VideoSegment, formatDuration, previewSegment } from '@/core/services/le
 import { convertFileSrc } from '@tauri-apps/api/tauri';
 import styles from './ScriptEditor.module.less';
 
+// 兼容两种接口
 interface ScriptEditorProps {
-  videoPath: string;
+  // 旧接口
+  videoPath?: string;
   initialSegments?: VideoSegment[];
-  onSave: (segments: VideoSegment[]) => void;
+  onSave?: (segments: VideoSegment[]) => void;
   onExport?: (format: string) => void;
+  // 新接口 (来自 VideoStudio)
+  script?: any;
+  metadata?: any;
+  onScriptUpdate?: (updatedScript: any) => void;
+  // VideoStudio 使用的 segments
+  segments?: VideoSegment[];
+  onSegmentsChange?: (newSegments: VideoSegment[]) => void;
 }
 
 /**
@@ -40,7 +49,10 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
   videoPath,
   initialSegments = [],
   onSave,
-  onExport
+  onExport,
+  script,
+  metadata,
+  onScriptUpdate,
 }) => {
   const [segments, setSegments] = useState<VideoSegment[]>(initialSegments);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);

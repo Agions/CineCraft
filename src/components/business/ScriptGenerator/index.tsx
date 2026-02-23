@@ -43,7 +43,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useModel, useModelCost } from '@/core/hooks/useModel';
 import { useProject } from '@/core/hooks/useProject';
 import ModelSelector from '@/components/ModelSelector';
-import type { ScriptData, ScriptMetadata } from '@/core/types';
+import type { ScriptData, ScriptMetadata, ScriptSegment } from '@/core/types';
 import styles from './index.module.less';
 
 const { Title, Text, Paragraph } = Typography;
@@ -211,7 +211,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
                 text={
                   <Space>
                     <Text>{selectedModel.name}</Text>
-                    <Tag size="small" color={isConfigured ? 'success' : 'warning'}>
+                    <Tag color={isConfigured ? 'success' : 'warning'}>
                       {isConfigured ? '已配置' : '未配置'}
                     </Tag>
                   </Space>
@@ -468,13 +468,13 @@ function generateMockScript(values: any): string {
 希望通过这个视频，能够帮助大家更好地理解${values.topic}。让我们开始吧！`;
 }
 
-function generateMockSegments(values: any) {
+function generateMockSegments(values: any): ScriptSegment[] {
   return [
     { id: '1', startTime: 0, endTime: 10, content: '开场介绍', type: 'narration' },
     { id: '2', startTime: 10, endTime: 60, content: '核心概念讲解', type: 'narration' },
     { id: '3', startTime: 60, endTime: 120, content: '实际演示', type: 'action' },
     { id: '4', startTime: 120, endTime: 150, content: '总结回顾', type: 'narration' }
-  ];
+  ] as ScriptSegment[];
 }
 
 function estimateWordCount(length: string): number {

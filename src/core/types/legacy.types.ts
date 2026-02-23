@@ -105,4 +105,87 @@ export interface ProjectData {
   metadata?: any;
   keyFrames?: string[];
   script?: any[];
+}
+
+/**
+ * 视频元数据
+ */
+export interface VideoMetadata {
+  duration: number;
+  width: number;
+  height: number;
+  fps: number;
+  codec?: string;
+  bitrate?: number;
+}
+
+/**
+ * 脚本类型
+ */
+export interface Script {
+  id: string;
+  title: string;
+  content: string;
+  segments: ScriptSegment[];
+  createdAt: string;
+  updatedAt: string;
+  videoId?: string;
+  modelUsed?: string;
+}
+
+/**
+ * 脚本片段
+ */
+export interface ScriptSegment {
+  id: string;
+  startTime: number;
+  endTime: number;
+  content: string;
+  type: 'narration' | 'dialogue' | 'action';
+}
+
+/**
+ * 时间线
+ */
+export interface Timeline {
+  segments: TimelineSegment[];
+  duration: number;
+}
+
+export interface TimelineSegment {
+  id: string;
+  startTime: number;
+  endTime: number;
+  type: 'video' | 'audio' | 'text';
+  data: any;
+}
+
+/**
+ * 视频分析
+ */
+export interface VideoAnalysis {
+  duration: number;
+  scenes: SceneInfo[];
+  keyFrames: string[];
+  audio?: AudioInfo;
+  keyMoments?: KeyMoment[];
+}
+
+export interface KeyMoment {
+  time: number;
+  description: string;
+  type: 'action' | 'transition' | 'highlight';
+}
+
+export interface SceneInfo {
+  startTime: number;
+  endTime: number;
+  description: string;
+  keyFrame?: string;
+}
+
+export interface AudioInfo {
+  hasAudio: boolean;
+  language?: string;
+  transcript?: string;
 } 

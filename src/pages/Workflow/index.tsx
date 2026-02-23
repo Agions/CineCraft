@@ -248,8 +248,7 @@ const WorkflowPage: React.FC = () => {
             <Title level={5}>📋 创建摘要</Title>
             
             <div className={styles.summaryItem}>
-              <Text type="</Text>
-             secondary">项目名称 <Text strong>{projectName || '未设置'}</Text>
+              <Text type="secondary">项目名称</Text> <Text strong>{projectName || '未设置'}</Text>
             </div>
             
             <div className={styles.summaryItem}>

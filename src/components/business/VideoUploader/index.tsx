@@ -19,12 +19,12 @@ import {
 import {
   UploadOutlined,
   VideoCameraOutlined,
-  FileVideoOutlined,
+  FileOutlined,
   CheckCircleOutlined,
   WarningOutlined,
   DeleteOutlined,
   EyeOutlined,
-  FileSizeOutlined
+  FileExcelOutlined
 } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVideo } from '@/core/hooks/useVideo';
@@ -108,12 +108,14 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
   const renderUploadArea = () => (
     <Dragger
       accept={SUPPORTED_FORMATS.join(',')}
-      beforeUpload={handleFileSelect}
+      beforeUpload={handleFileSelect as any}
       showUploadList={false}
       disabled={disabled || isUploading}
       className={`${styles.dragger} ${dragActive ? styles.dragActive : ''}`}
-      onDragEnter={() => setDragActive(true)}
-      onDragLeave={() => setDragActive(false)}
+      {...{
+        onDragEnter: () => setDragActive(true),
+        onDragLeave: () => setDragActive(false)
+      }}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
@@ -170,7 +172,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
               />
             ) : (
               <div className={styles.placeholder}>
-                <FileVideoOutlined />
+                <FileOutlined />
               </div>
             )}
             <div className={styles.overlay}>

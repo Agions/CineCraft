@@ -73,23 +73,31 @@ interface VideoSegment {
 }
 
 interface VideoProcessingControllerProps {
-  videoPath: string;
-  segments: VideoSegment[];
+  // 旧接口 (全部可选，支持新用法)
+  videoPath?: string;
+  segments?: VideoSegment[];
   onProcessingComplete?: (outputPath: string) => void;
   defaultQuality?: string;
   defaultFormat?: string;
   defaultTransition?: string;
   defaultAudioProcess?: string;
+  // 新接口 (来自 VideoStudio)
+  project?: any;
+  onProcessingStart?: () => void;
+  onProcessingCompleteNew?: (updatedProject: any) => void;
 }
 
 const VideoProcessingController: React.FC<VideoProcessingControllerProps> = ({
-  videoPath,
-  segments,
+  videoPath = '',
+  segments = [],
   onProcessingComplete,
   defaultQuality = 'medium',
   defaultFormat = 'mp4',
   defaultTransition = 'fade',
-  defaultAudioProcess = 'original'
+  defaultAudioProcess = 'original',
+  project,
+  onProcessingStart,
+  onProcessingCompleteNew
 }) => {
   // 基本设置
   const [videoQuality, setVideoQuality] = useState(defaultQuality);
@@ -205,6 +213,7 @@ const VideoProcessingController: React.FC<VideoProcessingControllerProps> = ({
         `${itemName.replace(/[^\w\s-]/gi, '')}_${new Date().toISOString().split('T')[0]}` : 
         `剪辑_${new Date().toISOString().split('T')[0]}`;
       
+      // @ts-ignore - File System Access API
       const savePath = await window.showSaveFilePicker({
         suggestedName: `${fileName}.${exportFormat}`,
         types: [{

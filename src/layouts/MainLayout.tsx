@@ -56,9 +56,7 @@ const MainLayout: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { notifications } = useAppStore();
   const [collapsed, setCollapsed] = useState(false);
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [notificationDrawerOpen, setNotificationDrawerOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [tauriSupported, setTauriSupported] = useState(true);
 
   useEffect(() => {
@@ -75,18 +73,7 @@ const MainLayout: React.FC = () => {
     };
     
     checkTauriSupport();
-    
-    const handleResize = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (!mobile && mobileDrawerOpen) {
-        setMobileDrawerOpen(false);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [mobileDrawerOpen]);
+  }, []);
 
   // 用户菜单选项
   const userMenuItems = [
@@ -171,12 +158,7 @@ const MainLayout: React.FC = () => {
       selectedKeys={[location.pathname === '/' ? '/' : `/${location.pathname.split('/')[1]}`]}
       defaultSelectedKeys={['/']}
       items={menuItems}
-      onClick={({ key }) => {
-        navigate(key);
-        if (isMobile) {
-          setMobileDrawerOpen(false);
-        }
-      }}
+      onClick={({ key }) => navigate(key)}
       className={styles.mainMenu}
     />
   );
@@ -185,23 +167,13 @@ const MainLayout: React.FC = () => {
     <Layout className={`${styles.layout} ${isDarkMode ? 'dark' : ''}`}>
       <Header className={styles.header}>
         <div className={styles.headerLeft}>
-          {isMobile && (
-            <Button
-              type="text"
-              icon={<MenuOutlined />}
-              onClick={() => setMobileDrawerOpen(true)}
-              className={styles.menuButton}
-            />
-          )}
           <div className={styles.logo} onClick={() => navigate('/')}>
             <FireOutlined className={styles.logoIcon} />
             <span className={styles.logoText}>ClipAiMan</span>
           </div>
-          {!isMobile && (
-            <div className={styles.pageTitle}>
-              {getPageTitle()}
-            </div>
-          )}
+          <div className={styles.pageTitle}>
+            {getPageTitle()}
+          </div>
         </div>
         <div className={styles.headerRight}>
           <Tooltip title={isDarkMode ? "切换到亮色模式" : "切换到暗色模式"}>
@@ -238,42 +210,22 @@ const MainLayout: React.FC = () => {
         </div>
       </Header>
       <Layout className={styles.mainContainer}>
-        {!isMobile ? (
-          <Sider 
-            width={220} 
-            className={styles.sider}
-            collapsible
-            collapsed={collapsed}
-            onCollapse={setCollapsed}
-            theme={isDarkMode ? 'dark' : 'light'}
-            breakpoint="lg"
-          >
-            {renderMenu()}
-          </Sider>
-        ) : (
-          <Drawer
-            title={
-              <div className={styles.drawerHeader}>
-                <FireOutlined className={styles.logoIcon} />
-                <span className={styles.logoText}>ClipAiMan</span>
-              </div>
-            }
-            placement="left"
-            onClose={() => setMobileDrawerOpen(false)}
-            open={mobileDrawerOpen}
-            bodyStyle={{ padding: 0 }}
-            width={260}
-            className={styles.mobileDrawer}
-            closeIcon={null}
-          >
-            {renderMenu()}
-          </Drawer>
-        )}
+        <Sider 
+          width={220} 
+          className={styles.sider}
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          theme={isDarkMode ? 'dark' : 'light'}
+          breakpoint="lg"
+        >
+          {renderMenu()}
+        </Sider>
         <Layout>
           <Content 
             className={styles.content}
             style={{
-              marginLeft: isMobile ? 0 : (collapsed ? 80 : 220)
+              marginLeft: collapsed ? 80 : 220
             }}
           >
             <div className={styles.contentInner}>

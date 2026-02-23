@@ -5,26 +5,14 @@
 
 import { storageService } from './storage.service';
 
-// 平台类型
-export type Platform = 'web' | 'desktop' | 'mobile' | 'ios' | 'android';
+// 平台类型 - 桌面端专用，移除移动端
+export type Platform = 'web' | 'desktop';
 
 // 环境检测
 const getPlatform = (): Platform => {
   // Tauri 环境
   if (typeof window !== 'undefined' && '__TAURI__' in window) {
     return 'desktop';
-  }
-  
-  // 移动端检测
-  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-  if (/iPhone|iPad|iPod/i.test(ua)) {
-    return 'ios';
-  }
-  if (/Android/i.test(ua)) {
-    return 'android';
-  }
-  if (/mobile/i.test(ua)) {
-    return 'mobile';
   }
   
   return 'web';
@@ -34,9 +22,10 @@ export const platform = getPlatform();
 
 export const isWeb = platform === 'web';
 export const isDesktop = platform === 'desktop';
-export const isMobile = platform === 'mobile' || platform === 'ios' || platform === 'android';
-export const isIOS = platform === 'ios';
-export const isAndroid = platform === 'android';
+// 移除移动端检测，始终为 false
+export const isMobile = false;
+export const isIOS = false;
+export const isAndroid = false;
 
 // ========== 存储适配 ==========
 
@@ -91,34 +80,10 @@ class DesktopStorageAdapter implements StorageAdapter {
   }
 }
 
-class MobileStorageAdapter implements StorageAdapter {
-  // 移动端使用 localStorage + sessionStorage
-  private local = new WebStorageAdapter();
-
-  get<T>(key: string): T | null {
-    return this.local.get<T>(key);
-  }
-
-  set<T>(key: string, value: T): void {
-    this.local.set(key, value);
-  }
-
-  remove(key: string): void {
-    this.local.remove(key);
-  }
-
-  clear(): void {
-    this.local.clear();
-  }
-}
-
 // 获取当前平台的存储适配器
 export const getStorageAdapter = (): StorageAdapter => {
   if (isDesktop) {
     return new DesktopStorageAdapter();
-  }
-  if (isMobile) {
-    return new MobileStorageAdapter();
   }
   return new WebStorageAdapter();
 };

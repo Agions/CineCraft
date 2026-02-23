@@ -8,7 +8,7 @@ import { useStore } from '@/store';
 import { AI_MODELS, MODEL_PROVIDERS, getModelById, getModelsByProvider, getRecommendedModels } from '@/core/config/models.config';
 import type { AIModel, ModelProvider, ModelCategory, AIModelSettings } from '@/core/types';
 
-interface UseModelReturn {
+export interface UseModelReturn {
   // 模型列表
   allModels: AIModel[];
   availableModels: AIModel[];

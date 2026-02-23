@@ -262,9 +262,9 @@ const Projects: React.FC = () => {
                           <Button 
                             type="text" 
                             icon={<EyeOutlined />}
-                            classNameBtn}
+                            className={styles.overlayBtn}
                           />
-={styles.overlay                        </Tooltip>
+                        </Tooltip>
                         <Tooltip title="编辑">
                           <Button 
                             type="text" 

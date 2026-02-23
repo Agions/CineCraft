@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
+import { MODEL_PROVIDERS } from '@/core/config/models.config';
 import {
   Card,
   Radio,
@@ -184,7 +185,6 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         <Card
           className={`${styles.modelCard} ${isSelected ? styles.selected : ''} ${!isAvailable ? styles.unavailable : ''}`}
           onClick={() => handleSelect(model.id)}
-          size="small"
           hoverable={isAvailable}
         >
           <div className={styles.cardHeader}>
@@ -211,7 +211,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                 </Tooltip>
               )}
               {!isAvailable && (
-                <Tag color="default" size="small">未配置</Tag>
+                <Tag color="default">未配置</Tag>
               )}
             </Space>
           </div>
@@ -224,7 +224,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
               <div className={styles.features}>
                 {model.features.slice(0, 3).map((feature, idx) => (
-                  <Tag key={idx} size="small" className={styles.featureTag}>
+                  <Tag key={idx} className={styles.featureTag}>
                     {feature}
                   </Tag>
                 ))}
@@ -233,15 +233,15 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
               <Divider className={styles.divider} />
 
               <div className={styles.cardFooter}>
-                <Space size="small">
+                <Space>
                   <Tooltip title={`上下文: ${(model.contextWindow / 1000).toFixed(0)}K tokens`}>
-                    <Tag icon={<RobotOutlined />} size="small">
+                    <Tag icon={<RobotOutlined />}>
                       {(model.contextWindow / 1000).toFixed(0)}K
                     </Tag>
                   </Tooltip>
                   {showCost && cost && (
                     <Tooltip title="预估成本（500字脚本）">
-                      <Tag icon={<DollarOutlined />} size="small" color="green">
+                      <Tag icon={<DollarOutlined />} color="green">
                         {cost}
                       </Tag>
                     </Tooltip>
@@ -298,7 +298,6 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
               <Button
                 key={model.id}
                 type={currentRecommended?.id === model.id ? 'primary' : 'default'}
-                size="small"
                 onClick={() => selectRecommended(idx)}
               >
                 {idx === 0 && <StarOutlined />}

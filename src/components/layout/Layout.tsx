@@ -106,7 +106,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   // 用户下拉菜单
-  const userMenu = {
+  const userMenu: any = {
     items: [
       {
         key: 'profile',
@@ -138,7 +138,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
   
   // 通知菜单
-  const notificationMenu = {
+  const notificationMenu: any = {
     items: [
       {
         key: '1',

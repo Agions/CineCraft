@@ -10,7 +10,7 @@ interface NotificationCenterProps {
 }
 
 const NotificationCenter: React.FC<NotificationCenterProps> = ({ open, onClose }) => {
-  const { notifications, clearNotifications } = useAppStore();
+  const { notifications, clearAllNotifications } = useAppStore();
 
   const mockNotifications = [
     {
@@ -35,7 +35,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ open, onClose }
       open={open}
       width={320}
       extra={
-        <Button type="link" onClick={clearNotifications} disabled={!notifications}>
+        <Button type="link" onClick={clearAllNotifications} disabled={!notifications}>
           清除全部
         </Button>
       }

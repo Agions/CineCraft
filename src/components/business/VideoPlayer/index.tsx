@@ -17,6 +17,7 @@ interface VideoPlayerProps {
   height?: number | string;
   onTimeUpdate?: (currentTime: number) => void;
   onEnded?: () => void;
+  ref?: React.RefObject<HTMLVideoElement>;
 }
 
 function VideoPlayer({
@@ -27,8 +28,10 @@ function VideoPlayer({
   height = 'auto',
   onTimeUpdate,
   onEnded,
+  ref: externalRef,
 }: VideoPlayerProps): React.ReactElement {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const internalVideoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = externalRef || internalVideoRef;
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);

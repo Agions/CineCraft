@@ -326,3 +326,5 @@ export type WorkflowStep =
   | 'preview'
   | 'edit'
   | 'export';
+
+export type { Timeline, TimelineSegment } from './legacy.types';

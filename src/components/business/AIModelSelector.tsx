@@ -142,21 +142,6 @@ const AIModelSelector: React.FC<AIModelSelectorProps> = ({
   const [activeCategory, setActiveCategory] = useState<ModelCategory>(category);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<'card' | 'list'>(compact ? 'list' : 'card');
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  // 响应式布局处理
-  useEffect(() => {
-    const handleResize = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (mobile && viewMode === 'card') {
-        setViewMode('list');
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [viewMode]);
 
   // 过滤模型
   const filteredModels = models.filter(model => {
@@ -449,7 +434,7 @@ const AIModelSelector: React.FC<AIModelSelectorProps> = ({
             </motion.div>
           )}
           
-          {!isMobile && !compact && (
+          {!compact && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

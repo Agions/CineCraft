@@ -47,9 +47,9 @@ class ApiClient {
       (config) => {
         // 添加认证 token
         const token = localStorage.getItem('reelforge_token');
-        if (token && !config.headers?.skipAuth) {
+        if (token && !(config as any).headers?.skipAuth) {
           config.headers = config.headers || {};
-          config.headers.Authorization = `Bearer ${token}`;
+          (config.headers as any).Authorization = `Bearer ${token}`;
         }
 
         return config;
@@ -79,7 +79,7 @@ class ApiClient {
    * 错误处理
    */
   private handleError(error: AxiosError) {
-    if (error.config?.skipErrorHandler) {
+    if ((error.config as any)?.skipErrorHandler) {
       return;
     }
 
