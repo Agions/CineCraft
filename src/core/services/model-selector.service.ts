@@ -16,8 +16,8 @@ export const MODEL_PROVIDERS = {
   // 图像生成
   image: {
     primary: 'seedream-5.0',
-    fallback: ['kling-1.6', 'vidu-2.0', 'dalle-3', 'midjourney-v6'],
-    keys: ['seedream_api_key', 'kling_api_key', 'vidu_api_key', 'openai_api_key', 'midjourney_api_key']
+    fallback: ['kling-1.6', 'vidu-2.0', 'flux-pro', 'ideogram-3', 'recraft-v3'],
+    keys: ['seedream_api_key', 'kling_api_key', 'vidu_api_key', 'flux_api_key', 'ideogram_api_key', 'recraft_api_key']
   },
   // 视频生成
   video: {

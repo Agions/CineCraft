@@ -241,8 +241,9 @@ export const RENDER_SETTINGS: StepSetting[] = [
       { value: 'seedream-5.0', label: 'Seedream 5.0 (字节)' },
       { value: 'kling-1.6', label: '可灵 1.6 (快手)' },
       { value: 'vidu-2.0', label: 'Vidu 2.0 (生数)' },
-      { value: 'dalle-3', label: 'DALL-E 3 (OpenAI)' },
-      { value: 'midjourney-v6', label: 'Midjourney V6' },
+      { value: 'flux-pro', label: 'Flux Pro (BlackForest)' },
+      { value: 'ideogram-3', label: 'Ideogram 3.0' },
+      { value: 'recraft-v3', label: 'Recraft V3' },
     ],
     default: 'auto'
   },
