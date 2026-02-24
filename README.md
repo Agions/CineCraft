@@ -135,6 +135,12 @@ MIT License
 
 ---
 
+## 🤝 参与贡献
+
+欢迎提交 Pull Request！
+
+---
+
 <p align="center">
   <strong>ManGa AI</strong> — 让每一帧都有灵魂
 </p>
