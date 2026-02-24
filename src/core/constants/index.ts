@@ -69,6 +69,122 @@ export const RESOLUTION_OPTIONS = [
   { value: '4k', label: '4K UHD', width: 3840, height: 2160 }
 ] as const;
 
+// 视频宽高比选项
+export const ASPECT_RATIOS = [
+  { 
+    value: '9:16', 
+    label: '9:16', 
+    labelCn: '竖屏', 
+    desc: '抖音/快手/视频号',
+    width: 1080, 
+    height: 1920,
+    category: 'short'
+  },
+  { 
+    value: '16:9', 
+    label: '16:9', 
+    labelCn: '横屏', 
+    desc: '西瓜视频/YouTube',
+    width: 1920, 
+    height: 1080,
+    category: 'landscape'
+  },
+  { 
+    value: '1:1', 
+    label: '1:1', 
+    labelCn: '方屏', 
+    desc: '小红书/Instagram',
+    width: 1080, 
+    height: 1080,
+    category: 'square'
+  },
+  { 
+    value: '4:3', 
+    label: '4:3', 
+    labelCn: '传统', 
+    desc: '传统比例',
+    width: 1440, 
+    height: 1080,
+    category: 'legacy'
+  },
+  { 
+    value: '21:9', 
+    label: '21:9', 
+    labelCn: '超宽', 
+    desc: '电影宽屏',
+    width: 2560, 
+    height: 1080,
+    category: 'ultrawide'
+  }
+] as const;
+
+// 短视频比例（用于快捷选择）
+export const SHORT_VIDEO_ASPECT_RATIOS = ASPECT_RATIOS.filter(r => r.category === 'short' || r.category === 'square');
+
+// 获取比例的宽高（基于目标分辨率）
+export const getAspectRatioDimensions = (
+  aspectValue: string, 
+  baseResolution: string = '1080p'
+): { width: number; height: number } => {
+  const aspect = ASPECT_RATIOS.find(r => r.value === aspectValue);
+  const resolution = RESOLUTION_OPTIONS.find(r => r.value === baseResolution);
+  
+  if (!aspect || !resolution) {
+    return { width: 1920, height: 1080 }; // 默认 16:9
+  }
+  
+  // 根据基准分辨率计算目标比例的尺寸
+  const baseHeight = resolution.height;
+  const aspectRatio = aspect.width / aspect.height;
+  const width = Math.round(baseHeight * aspectRatio);
+  const height = baseHeight;
+  
+  return { width, height };
+};
+
+// 视频裁剪模式
+export const CROP_MODES = [
+  { 
+    value: 'fit', 
+    label: '适应', 
+    labelEn: 'Fit', 
+    desc: '完整显示内容，保持比例，可能有黑边' 
+  },
+  { 
+    value: 'fill', 
+    label: '填充', 
+    labelEn: 'Fill', 
+    desc: '填满整个画面，可能裁剪部分内容' 
+  },
+  { 
+    value: 'stretch', 
+    label: '拉伸', 
+    labelEn: 'Stretch', 
+    desc: '拉伸填满画面，不保持比例' 
+  },
+  { 
+    value: 'smart', 
+    label: '智能裁剪', 
+    labelEn: 'Smart Crop', 
+    desc: 'AI 自动识别主体并进行裁剪' 
+  },
+  { 
+    value: 'manual', 
+    label: '手动裁剪', 
+    labelEn: 'Manual', 
+    desc: '手动调整裁剪区域' 
+  }
+] as const;
+
+// 裁剪对齐方式
+export const CROP_ALIGNMENTS = [
+  { value: 'center', label: '居中' },
+  { value: 'top', label: '顶部' },
+  { value: 'bottom', label: '底部' },
+  { value: 'left', label: '左侧' },
+  { value: 'right', label: '右侧' }
+] as const;
+
 // 转场效果
 export const TRANSITION_EFFECTS = [
   { value: 'fade', label: '淡入淡出', duration: 0.5 },
@@ -136,7 +252,9 @@ export const DEFAULTS = {
   DEFAULT_OUTPUT_FORMAT: 'mp4',
   DEFAULT_LANGUAGE: 'zh',
   DEFAULT_SCRIPT_LENGTH: 'medium',
-  DEFAULT_STYLE: 'professional'
+  DEFAULT_STYLE: 'professional',
+  DEFAULT_ASPECT_RATIO: '16:9',
+  DEFAULT_RESOLUTION: '1080p'
 } as const;
 
 // 文件类型映射

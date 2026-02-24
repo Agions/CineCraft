@@ -39,77 +39,56 @@ import styles from './index.module.less';
 
 const { Title, Text, Paragraph } = Typography;
 
-// 10步工作流配置
+// 7步工作流配置 (优化后)
 const WORKFLOW_STEPS = [
   { 
-    key: 'novel-upload', 
-    title: '上传小说', 
+    key: 'import', 
+    title: '📥 导入', 
     icon: <UploadOutlined />,
     color: '#6366f1',
-    description: '上传 TXT/EPUB/PDF 文件'
+    description: '上传小说/漫画素材'
   },
   { 
-    key: 'novel-parse', 
-    title: '智能解析', 
-    icon: <FileTextOutlined />,
+    key: 'generate', 
+    title: '🤖 生成', 
+    icon: <ThunderboltOutlined />,
     color: '#8b5cf6',
-    description: 'AI 提取角色和章节'
+    description: 'AI 智能生成内容'
   },
   { 
-    key: 'script-generate', 
-    title: '剧本生成', 
-    icon: <PlayCircleOutlined />,
+    key: 'storyboard', 
+    title: '🎬 分镜', 
+    icon: <PictureOutlined />,
     color: '#ec4899',
-    description: '生成场景化剧本'
+    description: 'AI 智能分镜设计'
   },
   { 
-    key: 'storyboard-generate', 
-    title: '智能分镜', 
-    icon: <PictureOutlined />,
+    key: 'character', 
+    title: '👤 角色', 
+    icon: <FileTextOutlined />,
     color: '#f59e0b',
-    description: 'AI 生成分镜面板'
+    description: '角色形象设计'
   },
   { 
-    key: 'character-design', 
-    title: '角色设计', 
-    icon: <Avatar />,
-    color: '#10b981',
-    description: '设计角色形象'
-  },
-  { 
-    key: 'scene-render', 
-    title: '场景渲染', 
-    icon: <PictureOutlined />,
-    color: '#14b8a6',
-    description: 'AI 渲染漫画场景'
-  },
-  { 
-    key: 'animation', 
-    title: '动态合成', 
+    key: 'render', 
+    title: '🎨 渲染', 
     icon: <PlayCircleOutlined />,
-    color: '#3b82f6',
-    description: '镜头运动和转场'
+    color: '#10b981',
+    description: '场景与角色渲染'
   },
   { 
-    key: 'voiceover', 
-    title: '配音配乐', 
-    icon: <AudioOutlined />,
-    color: '#f97316',
-    description: 'TTS 语音和 BGM'
-  },
-  { 
-    key: 'lip-sync', 
-    title: '对口型', 
-    icon: <AudioOutlined />,
-    color: '#ef4444',
-    description: 'Wav2Lip 口型同步'
+    key: 'animate', 
+    title: '✨ 合成', 
+    icon: <SettingOutlined />,
+    color: '#06b6d4',
+    description: '动态合成与转场'
   },
   { 
     key: 'export', 
-    title: '导出发布', 
+    title: '📤 导出', 
     icon: <ExportOutlined />,
-    color: '#6366f1',
-    description: '生成成品视频'
+    color: '#f97316',
+    description: '导出视频/合集'
   },
 ];
 
