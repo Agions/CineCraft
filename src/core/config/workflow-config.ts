@@ -67,6 +67,7 @@ export const GENERATE_SETTINGS: StepSetting[] = [
     label: 'AI模型',
     type: 'select',
     options: [
+      { value: 'auto', label: '🤖 自动选择 (根据API Key)' },
       { value: 'glm-5', label: 'GLM-5 (智谱)' },
       { value: 'minimax-m2.5', label: 'MiniMax M2.5' },
       { value: 'kimi-k2.5', label: 'Kimi K2.5 (月之暗面)' },
@@ -75,7 +76,7 @@ export const GENERATE_SETTINGS: StepSetting[] = [
       { value: 'claude-3.5', label: 'Claude 3.5' },
       { value: 'qwen-2.5', label: 'Qwen 2.5 (阿里)' },
     ],
-    default: 'glm-5'
+    default: 'auto'
   },
   {
     key: 'episodes',
@@ -236,13 +237,14 @@ export const RENDER_SETTINGS: StepSetting[] = [
     label: '图像模型',
     type: 'select',
     options: [
+      { value: 'auto', label: '🤖 自动选择 (根据API Key)' },
       { value: 'jimeng-2.0', label: '即梦 2.0 (字节)' },
       { value: 'kling-1.6', label: '可灵 1.6 (快手)' },
       { value: 'vidu-2.0', label: 'Vidu 2.0 (生数)' },
       { value: 'dalle-3', label: 'DALL-E 3 (OpenAI)' },
       { value: 'midjourney-v6', label: 'Midjourney V6' },
     ],
-    default: 'jimeng-2.0'
+    default: 'auto'
   },
   {
     key: 'engine',
@@ -308,13 +310,14 @@ export const ANIMATE_SETTINGS: StepSetting[] = [
     label: '视频生成模型',
     type: 'select',
     options: [
+      { value: 'auto', label: '🤖 自动选择 (根据API Key)' },
       { value: 'seedance-2.0', label: 'Seedance 2.0 (字节)' },
       { value: 'kling-1.6', label: '可灵 1.6 (快手)' },
       { value: 'vidu-2.0', label: 'Vidu 2.0 (生数)' },
       { value: 'runway-gen3', label: 'Gen-3 (Runway)' },
       { value: 'pika-1.0', label: 'Pika 1.0' },
     ],
-    default: 'seedance-2.0'
+    default: 'auto'
   },
   {
     key: 'animationType',
