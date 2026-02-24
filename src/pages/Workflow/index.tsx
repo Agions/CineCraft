@@ -33,7 +33,10 @@ import {
   CloudUploadOutlined,
   PictureOutlined,
   AudioOutlined,
-  ExportOutlined
+  ExportOutlined,
+  EditOutlined,
+  BookOutlined,
+  FileSearchOutlined
 } from '@ant-design/icons';
 import styles from './index.module.less';
 
@@ -116,9 +119,52 @@ const WorkflowPage: React.FC = () => {
   const [selectedTemplate, setSelectedTemplate] = useState('');
   const [selectedModel, setSelectedModel] = useState('gpt-4');
   const [chapters, setChapters] = useState(5);
+  
+  // 导入相关状态
+  const [importType, setImportType] = useState<'novel' | 'script' | 'prompt'>('novel');
+  const [episodes, setEpisodes] = useState(1);
+  const [novelContent, setNovelContent] = useState('');
+  const [promptContent, setPromptContent] = useState('');
+
+  // 导入类型配置
+  const IMPORT_TYPES = [
+    { 
+      key: 'novel', 
+      title: '📚 小说导入', 
+      icon: <BookOutlined />,
+      color: '#6366f1',
+      description: '上传 TXT/EPUB/PDF 小说文件',
+      accept: '.txt,.epub,.pdf'
+    },
+    { 
+      key: 'script', 
+      title: '📝 剧本导入', 
+      icon: <FileTextOutlined />,
+      color: '#8b5cf6',
+      description: '导入已有剧本文件',
+      accept: '.json,.txt'
+    },
+    { 
+      key: 'prompt', 
+      title: '✨ AI 生成', 
+      icon: <ThunderboltOutlined />,
+      color: '#ec4899',
+      description: '输入提示词 AI 生成剧本',
+      accept: ''
+    },
+  ];
 
   const handleStart = () => {
-    console.log('开始工作流:', { projectName, selectedTemplate, selectedModel, chapters });
+    console.log('开始工作流:', { 
+      projectName, 
+      selectedTemplate, 
+      selectedModel, 
+      chapters,
+      importType,
+      episodes,
+      novelContent: importType === 'novel' ? novelContent : null,
+      promptContent: importType === 'prompt' ? promptContent : null
+    });
   };
 
   return (
@@ -130,7 +176,7 @@ const WorkflowPage: React.FC = () => {
             创建新漫剧项目
           </Title>
           <Text type="secondary" className={styles.desc}>
-            10 步智能工作流，将小说转化为精彩漫剧
+            7 步智能工作流，小说/剧本/提示词 → 精彩漫剧
           </Text>
         </div>
       </div>
@@ -151,6 +197,122 @@ const WorkflowPage: React.FC = () => {
                 className={styles.input}
               />
             </div>
+
+            {/* 导入方式选择 */}
+            <div className={styles.formGroup}>
+              <Text strong>📥 导入方式</Text>
+              <div className={styles.templateGrid}>
+                {IMPORT_TYPES.map((type) => (
+                  <div 
+                    key={type.key}
+                    className={`${styles.templateItem} ${importType === type.key ? styles.selected : ''}`}
+                    onClick={() => setImportType(type.key as any)}
+                    style={{ '--template-color': type.color } as React.CSSProperties}
+                  >
+                    <span className={styles.templateIcon}>{type.icon}</span>
+                    <span className={styles.templateName}>{type.title}</span>
+                    <span className={styles.templateDesc}>{type.description}</span>
+                    {importType === type.key && (
+                      <CheckCircleOutlined className={styles.checkIcon} />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 导入内容区域 */}
+            {importType === 'novel' && (
+              <div className={styles.formGroup}>
+                <Text strong>📄 上传小说</Text>
+                <Upload.Dragger
+                  accept=".txt,.epub,.pdf"
+                  showUploadList={false}
+                  beforeUpload={(file) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      setNovelContent(e.target?.result as string || '');
+                    };
+                    reader.readAsText(file);
+                    return false;
+                  }}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <BookOutlined />
+                  </p>
+                  <p className="ant-upload-text">点击或拖拽小说文件到此处</p>
+                  <p className="ant-upload-hint">支持 TXT/EPUB/PDF 格式</p>
+                </Upload.Dragger>
+                {novelContent && (
+                  <Tag color="green" style={{ marginTop: 8 }}>
+                    ✓ 已加载 {novelContent.substring(0, 50)}...
+                  </Tag>
+                )}
+              </div>
+            )}
+
+            {importType === 'script' && (
+              <div className={styles.formGroup}>
+                <Text strong>📝 上传剧本</Text>
+                <Upload.Dragger
+                  accept=".json,.txt"
+                  showUploadList={false}
+                  beforeUpload={(file) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      try {
+                        const content = e.target?.result as string;
+                        JSON.parse(content); // 验证 JSON
+                        setNovelContent(content);
+                      } catch {
+                        setNovelContent(content);
+                      }
+                    };
+                    reader.readAsText(file);
+                    return false;
+                  }}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <FileTextOutlined />
+                  </p>
+                  <p className="ant-upload-text">点击或拖拽剧本文件到此处</p>
+                  <p className="ant-upload-hint">支持 JSON/TXT 格式</p>
+                </Upload.Dragger>
+              </div>
+            )}
+
+            {importType === 'prompt' && (
+              <div className={styles.formGroup}>
+                <Text strong>✨ 输入提示词</Text>
+                <Input.TextArea
+                  placeholder="描述你想要生成的剧本内容...
+例如：一部关于都市爱情的漫画，主角是一位年轻的画家..."
+                  value={promptContent}
+                  onChange={(e) => setPromptContent(e.target.value)}
+                  rows={4}
+                  className={styles.input}
+                />
+                <Text type="secondary" style={{ display: 'block', marginTop: 8 }}>
+                  AI 将根据你的提示词生成完整的剧本内容
+                </Text>
+              </div>
+            )}
+
+            {/* 集数设置 */}
+            <div className={styles.formGroup}>
+              <Text strong>📺 剧集总数: {episodes} 集</Text>
+              <Slider 
+                min={1} 
+                max={50} 
+                value={episodes}
+                onChange={setEpisodes}
+                marks={{ 1: '1', 10: '10', 20: '20', 30: '30', 50: '50' }}
+              />
+              <Text type="secondary">
+                AI 将根据导入内容生成 {episodes} 集剧本
+              </Text>
+            </div>
+
+            <Divider />
 
             <div className={styles.formGroup}>
               <Text strong>选择类型</Text>
