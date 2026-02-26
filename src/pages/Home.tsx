@@ -21,6 +21,7 @@ import {
   BulbOutlined
 } from '@ant-design/icons';
 import { useTheme } from '@/context/ThemeContext';
+import RecommendPanel from '@/components/business/RecommendPanel';
 import styles from './Home.module.less';
 
 const { Title, Paragraph, Text } = Typography;
@@ -148,8 +149,11 @@ const Home = () => {
 
   return (
     <div className={styles.container}>
+      {/* 推荐面板 */}
+      <RecommendPanel />
+
       {/* 欢迎区 */}
-      <Card 
+      <Card
         className={`${styles.hero} ${isDarkMode ? styles.darkCard : ''}`}
         bordered={false}
       >

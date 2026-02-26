@@ -1,0 +1,154 @@
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.greeting {
+  margin-bottom: 24px;
+  text-align: center;
+
+  .greetingTitle {
+    margin-bottom: 8px;
+  }
+}
+
+.quickActions {
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+  border-radius: 12px;
+
+  :global(.ant-card-body) {
+    padding: 20px;
+  }
+}
+
+.quickButton {
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.recommendations {
+  margin-bottom: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  :global(.ant-typography) {
+    margin: 0;
+  }
+}
+
+.recommendCard {
+  height: 100%;
+  border-radius: 12px;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  :global(.ant-card-body) {
+    padding: 16px;
+  }
+}
+
+.cardContent {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
+.cardTitle {
+  font-size: 16px;
+}
+
+.cardDesc {
+  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.statsCard {
+  background: linear-gradient(135deg, #e6f7ff 0%, #f0f5ff 100%);
+  border-radius: 12px;
+
+  :global(.ant-card-body) {
+    padding: 20px;
+  }
+}
+
+// 响应式
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .quickButton {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .cardContent {
+    gap: 12px;
+  }
+
+  .iconWrapper {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .cardTitle {
+    font-size: 14px;
+  }
+}
