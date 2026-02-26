@@ -1,13 +1,17 @@
-import React from 'react';
-import { Card, Typography, Alert, Space } from 'antd';
-import { ThunderboltOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Typography, Alert, Space, Tabs } from 'antd';
+import { ThunderboltOutlined, InfoCircleOutlined, PictureOutlined, ClusterOutlined } from '@ant-design/icons';
 import WorkflowManager from '@/components/business/WorkflowManager';
 import FFmpegStatus from '@/components/business/FFmpegStatus';
+import AIImageGenerator from '@/components/business/AIImageGenerator';
 import styles from './index.module.less';
 
 const { Title, Text } = Typography;
+const { TabPane } = Tabs;
 
 const WorkflowPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('workflow');
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -30,7 +34,30 @@ const WorkflowPage: React.FC = () => {
       <FFmpegStatus />
 
       <Card className={styles.workflowCard}>
-        <WorkflowManager />
+        <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <TabPane
+            tab={
+              <span>
+                <ClusterOutlined />
+                漫剧工作流
+              </span>
+            }
+            key="workflow"
+          >
+            <WorkflowManager />
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <PictureOutlined />
+                图像/视频生成
+              </span>
+            }
+            key="generation"
+          >
+            <AIImageGenerator />
+          </TabPane>
+        </Tabs>
       </Card>
     </div>
   );
