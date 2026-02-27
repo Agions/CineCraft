@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Layout, Card, Button, Dropdown, Space, Typography, Tabs, 
   Row, Col, Progress, Tooltip, message, Empty, Tag, Skeleton,
-  Modal, Radio, Slider
+  Modal, Radio, Slider, Statistic
 } from 'antd';
 import { 
   PlayCircleOutlined, PauseCircleOutlined, ScissorOutlined, 
@@ -44,6 +44,8 @@ const VideoEditor: React.FC = () => {
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState<number>(-1);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [exportProgress, setExportProgress] = useState<number>(0);
+  const [exportStatus, setExportStatus] = useState<string>('');
   const [outputFormat, setOutputFormat] = useState<string>('mp4');
   const [videoQuality, setVideoQuality] = useState<string>('medium');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -263,6 +265,8 @@ const VideoEditor: React.FC = () => {
       }
 
       setIsExporting(true);
+      setExportProgress(0);
+      setExportStatus('正在准备导出...');
       
       // 准备片段数据
       const videoSegments = segments.map(seg => ({
@@ -272,27 +276,53 @@ const VideoEditor: React.FC = () => {
         content: null
       }));
 
-      // 调用后端 cut_video 命令
-      const result = await invoke<string>('cut_video', {
-        params: {
-          input_path: videoSrc.replace('tauri://localhost/', ''),
-          output_path: outputPath,
-          segments: videoSegments,
-          quality: videoQuality,
-          format: outputFormat,
-          transition: 'none',
-          transition_duration: 0.5,
-          volume: 1.0,
-          add_subtitles: false
-        }
-      });
+      // 模拟进度更新 (实际项目中可通过 WebSocket 或轮询获取真实进度)
+      const progressInterval = setInterval(() => {
+        setExportProgress(prev => {
+          if (prev >= 90) {
+            return prev;
+          }
+          setExportStatus(prev === 0 ? '正在处理视频...' : 
+                          prev < 30 ? '正在编码视频...' : 
+                          prev < 60 ? '正在生成音频...' : 
+                          prev < 80 ? '正在合成...' : '即将完成...');
+          return prev + Math.random() * 15;
+        });
+      }, 500);
 
-      message.success(`视频导出成功: ${result}`);
+      try {
+        // 调用后端 cut_video 命令
+        const result = await invoke<string>('cut_video', {
+          params: {
+            input_path: videoSrc.replace('tauri://localhost/', ''),
+            output_path: outputPath,
+            segments: videoSegments,
+            quality: videoQuality,
+            format: outputFormat,
+            transition: 'none',
+            transition_duration: 0.5,
+            volume: 1.0,
+            add_subtitles: false
+          }
+        });
+
+        // 完成进度
+        setExportProgress(100);
+        setExportStatus('导出完成!');
+
+        message.success(`视频导出成功: ${result}`);
+      } finally {
+        clearInterval(progressInterval);
+      }
     } catch (error) {
       console.error('导出失败:', error);
       message.error(`导出失败: ${error}`);
     } finally {
-      setIsExporting(false);
+      setTimeout(() => {
+        setIsExporting(false);
+        setExportProgress(0);
+        setExportStatus('');
+      }, 1000);
     }
   };
   
@@ -491,6 +521,36 @@ const VideoEditor: React.FC = () => {
   return (
     <Layout className={styles.editorLayout}>
       <Content className={styles.editorContent}>
+        {/* 导出进度弹窗 */}
+        <Modal
+          title="导出视频"
+          open={isExporting}
+          closable={false}
+          footer={null}
+          maskClosable={false}
+          width={400}
+        >
+          <div style={{ textAlign: 'center', padding: '20px 0' }}>
+            <Progress 
+              type="circle" 
+              percent={Math.round(exportProgress)} 
+              status={exportProgress >= 100 ? 'success' : 'active'}
+            />
+            <div style={{ marginTop: 20 }}>
+              <Text strong>{exportStatus}</Text>
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <Text type="secondary">
+                格式: {outputFormat.toUpperCase()} | 质量: {
+                  videoQuality === 'low' ? '低 (720p)' : 
+                  videoQuality === 'medium' ? '中 (1080p)' : 
+                  videoQuality === 'high' ? '高 (1080p)' : '超清 (原画)'
+                }
+              </Text>
+            </div>
+          </div>
+        </Modal>
+        
         {renderToolbar()}
         
         <Row gutter={[24, 24]}>

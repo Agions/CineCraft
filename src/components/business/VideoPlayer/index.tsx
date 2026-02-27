@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import { Slider, Button } from 'antd';
+import { Slider, Button, Tooltip } from 'antd';
 import {
   PlayCircleOutlined,
   PauseCircleOutlined,
   SoundOutlined,
   FullscreenOutlined,
+  FullscreenExitOutlined,
 } from '@ant-design/icons';
 import styles from './index.module.less';
 
@@ -38,6 +39,7 @@ function VideoPlayer({
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -57,14 +59,20 @@ function VideoPlayer({
       onEnded?.();
     };
 
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
     videoElement.addEventListener('timeupdate', handleTimeUpdate);
     videoElement.addEventListener('durationchange', handleDurationChange);
     videoElement.addEventListener('ended', handleEnded);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
 
     return () => {
       videoElement.removeEventListener('timeupdate', handleTimeUpdate);
       videoElement.removeEventListener('durationchange', handleDurationChange);
       videoElement.removeEventListener('ended', handleEnded);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, [onTimeUpdate, onEnded]);
 
@@ -183,10 +191,24 @@ function VideoPlayer({
               type="text"
               className={styles.controlButton}
               onClick={toggleFullscreen}
-              icon={<FullscreenOutlined />}
+              icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             />
           </div>
         </div>
+      </div>
+      
+      {/* 预览按钮 */}
+      <div className={styles.previewButtonContainer}>
+        <Tooltip title="全屏预览">
+          <Button
+            type="primary"
+            size="large"
+            icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            onClick={toggleFullscreen}
+          >
+            {isFullscreen ? '退出预览' : '预览'}
+          </Button>
+        </Tooltip>
       </div>
     </div>
   );

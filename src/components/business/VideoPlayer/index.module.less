@@ -179,4 +179,18 @@
 
 .videoPlayerContainer:not(:hover) .centerPlayButton {
   opacity: 0;
+}
+
+/* 预览按钮容器 */
+.previewButtonContainer {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  
+  :global(.ant-btn) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 } 
