@@ -40,8 +40,11 @@ import {
   InfoCircleOutlined,
   EditOutlined,
   PlusOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  BulbOutlined,
+  BulbFilled
 } from '@ant-design/icons';
+import { useTheme } from '@/context/ThemeContext';
 import styles from './Settings.module.less';
 
 const { Title, Text, Paragraph } = Typography;
@@ -87,7 +90,7 @@ const apiProviders = [
 ];
 
 const Settings: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('api');
+  const [activeTab, setActiveTab] = useState('general'); // 默认显示通用设置，方便查看主题切换
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({
     openai: '',
     anthropic: '',
@@ -95,6 +98,9 @@ const Settings: React.FC = () => {
     alibaba: '',
     zhipu: ''
   });
+  
+  // 使用主题上下文
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleSaveApiKey = (provider: string) => {
     console.log('保存 API Key:', provider);
@@ -204,6 +210,52 @@ const Settings: React.FC = () => {
       ),
       children: (
         <div className={styles.tabContent}>
+          {/* 主题设置 */}
+          <div className={styles.section}>
+            <Title level={4}>主题设置</Title>
+            <Paragraph type="secondary">
+              选择您喜欢的主题模式，主题更改将立即生效。
+            </Paragraph>
+            
+            <Radio.Group 
+              value={isDarkMode ? 'dark' : 'light'}
+              onChange={(e) => {
+                if (e.target.value !== (isDarkMode ? 'dark' : 'light')) {
+                  toggleTheme();
+                }
+              }}
+              buttonStyle="solid"
+              optionType="button"
+              size="large"
+              style={{ marginTop: 16 }}
+            >
+              <Radio.Button value="light">
+                <Space size={8}>
+                  <BulbFilled style={{ color: '#faad14' }} />
+                  浅色模式
+                </Space>
+              </Radio.Button>
+              <Radio.Button value="dark">
+                <Space size={8}>
+                  <BulbOutlined style={{ color: '#1890ff' }} />
+                  暗黑模式
+                </Space>
+              </Radio.Button>
+            </Radio.Group>
+            
+            <Alert
+              type="info"
+              showIcon
+              message="主题说明"
+              description={isDarkMode 
+                ? "当前为暗黑模式，适合夜间使用，减少眼睛疲劳。" 
+                : "当前为浅色模式，适合白天使用，界面更清晰。"}
+              style={{ marginTop: 16 }}
+            />
+          </div>
+
+          <Divider />
+
           <div className={styles.section}>
             <Title level={4}>基本设置</Title>
             

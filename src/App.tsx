@@ -1,15 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
-import { message, notification } from 'antd';
+import { message, notification, Spin } from 'antd';
 import Layout from './components/layout/Layout';
-import Home from './pages/Home';
-import Workflow from './pages/Workflow';
-import ProjectEdit from './pages/ProjectEdit';
-import ProjectDetail from './pages/ProjectDetail';
-import ScriptDetail from './pages/ScriptDetail';
-import VideoEditor from './pages/VideoEditor';
-import Settings from './pages/Settings';
 import './App.css';
+
+// 懒加载页面组件
+const Home = lazy(() => import('./pages/Home'));
+const Workflow = lazy(() => import('./pages/Workflow'));
+const ProjectEdit = lazy(() => import('./pages/ProjectEdit'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
+const ScriptDetail = lazy(() => import('./pages/ScriptDetail'));
+const VideoEditor = lazy(() => import('./pages/VideoEditor'));
+const Settings = lazy(() => import('./pages/Settings'));
+
+// 加载时的占位组件
+const PageLoader: React.FC = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100vh',
+    width: '100%' 
+  }}>
+    <Spin size="large" tip="加载页面中..." />
+  </div>
+);
 
 // 导入Provider组件
 import AppProvider from './providers/AppProvider';
@@ -85,7 +100,8 @@ const App: React.FC = () => {
     <AppProvider>
       <BrowserRouter>
         <Layout>
-          <Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
             {/* 首页 */}
             <Route path="/" element={<Home />} />
             
@@ -114,6 +130,7 @@ const App: React.FC = () => {
             {/* 重定向 */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </Suspense>
         </Layout>
       </BrowserRouter>
     </AppProvider>
