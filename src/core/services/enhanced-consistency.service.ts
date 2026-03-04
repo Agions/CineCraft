@@ -263,10 +263,10 @@ class EnhancedConsistencyService {
     
     // 查找对应表情
     let expressionText: string;
-    if (expressions.custom[emotion]) {
+    if (expressions.custom[emotion] !== undefined) {
       expressionText = expressions.custom[emotion];
-    } else if (expressions[emotion as keyof CharacterExpressions]) {
-      expressionText = expressions[emotion as keyof CharacterExpressions];
+    } else if (emotion in expressions) {
+      expressionText = expressions[emotion as keyof typeof expressions] || expressions.neutral;
     } else {
       expressionText = expressions.neutral;
     }

@@ -211,7 +211,7 @@ export function useVideo(): UseVideoReturn {
       }
       
       // 生成模拟分析结果
-      const analysisResult: VideoAnalysis = {
+      const analysisResult: any = {
         id: uuidv4(),
         videoId,
         scenes: generateMockScenes(video.duration),
