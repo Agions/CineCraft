@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface WorkflowState {
+export interface WorkflowState {
   currentStep: string;
   progress: number;
   status: 'idle' | 'running' | 'paused' | 'completed' | 'error';

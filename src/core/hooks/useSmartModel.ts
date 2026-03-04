@@ -6,7 +6,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { costService } from '@/core/services/cost.service';
 import { OPTIMIZATION_CONFIG } from '@/core/config/optimization.config';
-import { aiService } from '@/core/services/ai.service';
+import { aiService, AIResponse } from '@/core/services/ai.service';
 
 // 任务类型
 export type TaskType = 'simple' | 'standard' | 'complex' | 'creative';
@@ -125,7 +125,7 @@ export function useSmartModel() {
 
       // 调用 AI 服务
       let lastError: Error | null = null;
-      let result: string | null = null;
+      let result: AIResponse | null = null;
 
       for (let attempt = 0; attempt < maxRetries; attempt++) {
         try {
@@ -154,7 +154,7 @@ export function useSmartModel() {
 
       // 估算成本
       const inputTokens = Math.ceil(prompt.length / 4);
-      const outputTokens = Math.ceil(result.length / 4);
+      const outputTokens = Math.ceil(result.content.length / 4);
       const costRecord = costService.recordLLMCost(
         provider,
         model,

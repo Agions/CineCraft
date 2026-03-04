@@ -4,6 +4,7 @@
  */
 
 import type { ProjectData, UserPreferences } from '@/core/types';
+import type { AppState } from '@/core/stores/app.store';
 
 // 存储键名
 const STORAGE_KEYS = {

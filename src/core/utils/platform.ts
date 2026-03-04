@@ -3,7 +3,7 @@
  * 提供跨平台的统一 API
  */
 
-import { storageService } from './storage.service';
+import { storageService } from '@/core/services/storage.service';
 
 // 平台类型 - 桌面端专用，移除移动端
 export type Platform = 'web' | 'desktop';
